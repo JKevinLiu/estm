@@ -59,15 +59,15 @@ public class UserController {
 
 
     /**
-     * 添加用户
+     * 添加/修改 用户
      * @param user
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<JsonResult> add (@RequestBody User user){
         JsonResult r = new JsonResult();
         try {
-            int orderId = userService.add(user);
+            int orderId = userService.save(user);
             if (orderId < 0) {
                 r.setResult(orderId);
                 r.setStatus("fail");
@@ -112,35 +112,5 @@ public class UserController {
         }
         return ResponseEntity.ok(r);
     }
-
-
-    /**
-     * 根据id修改用户信息
-     * @param user
-     * @return
-     */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<JsonResult> update (@PathVariable("id") Integer id, @RequestBody User user){
-        JsonResult r = new JsonResult();
-        try {
-            int ret = userService.update(id, user);
-            if (ret < 0) {
-                r.setResult(ret);
-                r.setStatus("fail");
-            } else {
-                r.setResult(ret);
-                r.setStatus("ok");
-            }
-        } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
-
-
-            e.printStackTrace();
-        }
-        return ResponseEntity.ok(r);
-    }
-
-
 
 }

@@ -15,7 +15,7 @@ public interface UserMapper {
 
     public int add(User user);
 
-    public int update(@Param("id") Integer id, @Param("user") User user);
+    public int update(@Param("user") User user);
 
     public int delete(Integer id);
 
