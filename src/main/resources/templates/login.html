@@ -1,66 +1,70 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:float="http://www.w3.org/1999/xhtml">
 <head>
-    <title>登录页面</title>
-
-    <link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="css/themes/icon.css" />
-    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>XX管理系统</title>
+    <link href="css/login.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
 </head>
+<script>
+    //信息保存按钮事件
+    function login(){
+        $("#message").html("正在登录.......");
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if(!username){
+            $("#message").html("用户名不能为空！");
+            return false;
+        }
+        else if(!password){
+            $("#message").html("密码不能为空！");
+            return false;
+        }else{
+            $("#loginFrom").submit();
+        }
+    }
 
-<body >
-<div id="login" class="easyui-window" style="padding-top: 5px;padding-left: 15px" >
-    <form id="loginForm" action="dologin" method="post">
-        <table>
+
+</script>
+<style>
+    .message1{color:red}
+</style>
+<body>
+<div class="second_body">
+    <form  id="loginFrom" action="dologin" method="post">
+        <div class="logo"></div>
+        <div class="title-zh">XX管理系统</div>
+        <div class="title-en" style="">Enterprise Information Manage System</div>
+        <div class="message" data-bind="html:message"></div>
+        <table border="0" style="width:300px;">
             <tr>
-                <td>
-                    <table>
-                        <tr><td>用户名</td><td><input  class="easyui-validatebox"   id="username" name="username" type="text"/></td><td></td></tr>
-                        <tr><td>密 码</td><td><input  class="easyui-validatebox"  id="password" name="password" type="password" /></td><td></td></tr>
-                        <div style="text-align: center;color: red;" id="showMsg" th:text="${err_msg}"></div>
-                    </table>
+                <td style="white-space:nowrap; padding-bottom: 5px;width:55px;">用户名：</td>
+                <td colspan="2"><input type="text"  name="username" id="username" class="login" data-bind="value:form.username" /></td>
+            </tr>
+            <tr>
+                <td class="lable" style="white-space:nowrap; letter-spacing: 0.5em; vertical-align: middle">密码：</td>
+                <td colspan="2"><input type="password"  name="password" id="password" class="login" data-bind="value:form.password" /></td>
+            </tr>
+
+            <tr>
+                <td colspan="3" style="text-align:center;height:27px">
                 </td>
-                <td>
-                    <img src="images/head.png"/>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center">
+                    <input type="button" value="登录" class="login_button"  onclick="login()" />
+                    <input type="button" value="重置" class="reset_botton"  onclick="reset()" />
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3" style="text-align:center">
+                    <span  class="message1" id="message" th:text="${err_msg}"></span>
                 </td>
             </tr>
         </table>
     </form>
 </div>
-<script type="text/javascript">
-    $(function() {
-        $("#login").dialog({
-            title : '登录',
-            backcolor:'#00f',
-            iconCls : 'icon-lock',
-            width : '420',
-            height : '230',
-            closable : false,
-            minimizable : false,
-            maximizable : false,
-            resizable : false,
-            modal : true,
-            buttons : [ {
-                text : '登录',
-                iconCls : 'icon-ok',
-                handler:function(){
-                    doLogin();
-                }
-            } ]
-        });
-    });
-    function doLogin(){
-        if($("input[name='username']").val()=="" || $("input[name='password']").val()==""){
-            $("#showMsg").html("用户名或密码为空，请输入");
-            $("input[name='login']").focus();}else{
-            $("#login").dialog("close");
-            $("#loginForm").get(0).submit();
-        }
-    }
-</script>
-
 </body>
 </html>

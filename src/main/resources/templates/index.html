@@ -17,7 +17,7 @@
 	<div class="top-btns">
 		<span th:text="'欢迎您，' + ${curUser.username}"></span>
 		<!--<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-lock'">修改密码</a>-->
-		<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-clear'">退出系统</a>
+		<a href="logout"  class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-clear'">退出系统</a>
 	</div>
 </div>
 
@@ -43,6 +43,7 @@
 		</div>
 	</div>
 </div>
+
 
 <div region="center" id="content">
 	<div class="easyui-tabs" fit="true" id="tt">
