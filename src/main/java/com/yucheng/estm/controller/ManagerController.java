@@ -24,10 +24,23 @@ public class ManagerController {
      *
      * @return
      */
-    @RequestMapping("audit_manager")
-    public String auditManager(){
-        return "html/audit_manager";
+    @RequestMapping("wait_audit")
+    public String waitAudit(){
+        return "html/audit/wait_audit";
     }
 
+    @RequestMapping("finished_audit")
+    public String finishedAudit(){
+        return "html/audit/wait_audit";
+    }
 
+    @RequestMapping("back_audit")
+    public String backAudit(){
+        return "html/audit/wait_audit";
+    }
+
+    @RequestMapping("audit_info")
+    public String auditInfo(){
+        return "html/audit/audit_info";
+    }
 }

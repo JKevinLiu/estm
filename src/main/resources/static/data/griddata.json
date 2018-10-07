@@ -2,16 +2,18 @@
 	"total": 2,
 	"rows": [
 		{
-			"outname":"张三",
+			"name":"张三",
 			"phone":"182XXXXXXX",
-			"busType":"房屋>>个人",
-			"auditState":"待审核"
+			"busType":"房屋>>买卖>>个人",
+			"commitDate" : "2018-10-07",
+			"options" : ""
 		},
 		{
-			"outname":"李四",
-			"phone":"183XXXXXXXXX",
-			"busType":"房屋>>个人",
-			"auditState":"审核不通过"
+			"name":"李四",
+			"phone":"183XXXXXXX",
+			"busType":"房屋>>买卖>>个人",
+			"commitDate" : "2018-10-07",
+			"options" : ""
 		}
 	]
 }

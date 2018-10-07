@@ -1,11 +1,15 @@
 package com.yucheng.estm.controller;
 
+import com.yucheng.estm.entity.Navinfo;
 import com.yucheng.estm.entity.User;
 import com.yucheng.estm.service.UserService;
+import com.yucheng.estm.utils.PremissionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 public class LoginController {
@@ -46,6 +50,10 @@ public class LoginController {
         }
 
         model.addObject("curUser", loginUser);
+
+        List<Navinfo> navList = PremissionUtil.getNavList();
+        model.addObject("navList", navList);
+
         model.setViewName("index");
 
         return  model;

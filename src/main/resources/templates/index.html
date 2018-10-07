@@ -23,22 +23,11 @@
 
 <div region="west" split="true" title="导航菜单" id="naver">
 	<div class="easyui-accordion" fit="true" id="navmenu">
-		<div title="资料管理">
-			<ul class="navmenu">
-				<li><a href="#" data-url="audit_manager">资料审核</a></li>
-			</ul>
-		</div>
-		<div title="推送管理">
-			<ul class="navmenu">
-				<li><a href="#" data-url="wx_send_log">推送日志</a></li>
-			</ul>
-		</div>
-		<div title="权限管理" >
-			<ul class="navmenu">
-				<li><a href="#">操作员管理</a></li>
-			</ul>
-			<ul class="navmenu">
-				<li><a href="#">角色管理</a></li>
+		<div th:each="navinfo : ${navList}" th:title="${navinfo.title}">
+			<ul th:each="secondNavinfo : ${navinfo.secondMenuList}" class="navmenu">
+				<li th:each="item : ${secondNavinfo.itemList}">
+					<a href="#" th:value="${item.url}" th:text="${item.manuName}"></a>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -87,10 +76,10 @@
 <script type="text/javascript">
     $(function() {
         //添加新的Tab页
-        $("#navmenu").on("click", "a[data-url]", function(e) {
+        $("#navmenu").on("click", "a[value]", function(e) {
             e.preventDefault();
             var tabTitle = $(this).text();
-            var tabUrl = $(this).data("url");
+            var tabUrl = $(this).attr("value");
 
             if($("#tt").tabs("exists", tabTitle)) { //判断该Tab页是否已经存在
                 $("#tt").tabs("select", tabTitle);
