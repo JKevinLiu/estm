@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yucheng.estm.mapper.AuditItemMapper" >
+  <resultMap id="BaseResultMap" type="com.yucheng.estm.entity.AuditItem" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="INTEGER" />
+    <result column="file_type" property="fileType" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="passed" property="passed" jdbcType="INTEGER" />
+    <result column="reson" property="reson" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_no, item_type, file_type, file_name, path, passed, reson
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_audit_item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_audit_item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yucheng.estm.entity.AuditItem" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_audit_item (order_no, item_type, file_type, 
+      file_name, path, passed, 
+      reson)
+    values (#{orderNo,jdbcType=VARCHAR}, #{itemType,jdbcType=INTEGER}, #{fileType,jdbcType=INTEGER}, 
+      #{fileName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{passed,jdbcType=INTEGER}, 
+      #{reson,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yucheng.estm.entity.AuditItem" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_audit_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="itemType != null" >
+        item_type,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="passed != null" >
+        passed,
+      </if>
+      <if test="reson != null" >
+        reson,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null" >
+        #{itemType,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="passed != null" >
+        #{passed,jdbcType=INTEGER},
+      </if>
+      <if test="reson != null" >
+        #{reson,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.AuditItem" >
+    update t_audit_item
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null" >
+        item_type = #{itemType,jdbcType=INTEGER},
+      </if>
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="passed != null" >
+        passed = #{passed,jdbcType=INTEGER},
+      </if>
+      <if test="reson != null" >
+        reson = #{reson,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.AuditItem" >
+    update t_audit_item
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      item_type = #{itemType,jdbcType=INTEGER},
+      file_type = #{fileType,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      passed = #{passed,jdbcType=INTEGER},
+      reson = #{reson,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

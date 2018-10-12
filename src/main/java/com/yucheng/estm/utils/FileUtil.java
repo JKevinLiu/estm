@@ -2,7 +2,23 @@ package com.yucheng.estm.utils;
 
 import com.deepoove.poi.XWPFTemplate;
 import org.apache.log4j.Logger;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.converter.PicturesManager;
+import org.apache.poi.hwpf.converter.WordToHtmlConverter;
+import org.apache.poi.hwpf.usermodel.PictureType;
+import org.apache.poi.xwpf.converter.core.BasicURIResolver;
+import org.apache.poi.xwpf.converter.core.FileImageExtractor;
+import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
+import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +31,12 @@ public class FileUtil {
 
     private static final int  BUFFER_SIZE = 2 * 1024;
 
+    /**
+     * 根据模板生成word文件
+     * @param fileRealPath
+     * @param templateFile
+     * @param properties
+     */
     public static void createDocByTemplate(String fileRealPath, File templateFile, Map<String,String> properties){
         XWPFTemplate template = null;
 
@@ -32,13 +54,13 @@ public class FileUtil {
             } catch (IOException e) {
                 log.error(e.getMessage(),e);
             }
-            log.debug("生成文件"+fileRealPath+" 成功！");
+            log.debug("生成文件" + fileRealPath + " 成功！");
         }
     }
 
 
     /**
-     * 压缩成ZIP 方法1
+     * 压缩成ZIP
      * @param srcDir 压缩文件夹路径
      * @param out    压缩文件输出流
      * @param KeepDirStructure  是否保留原来的目录结构,true:保留目录结构;
@@ -68,7 +90,7 @@ public class FileUtil {
     }
 
     /**
-     * 压缩成ZIP 方法2
+     * 压缩成ZIP
      * @param srcFiles 需要压缩的文件列表
      * @param out           压缩文件输出流
      * @throws RuntimeException 压缩失败会抛出运行时异常
@@ -152,16 +174,57 @@ public class FileUtil {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        /** 测试压缩方法1  */
-        FileOutputStream fos1 = new FileOutputStream(new File("c:/mytest01.zip"));
-        FileUtil.toZip("D:/log", fos1,true);
-        /** 测试压缩方法2  */
-        List<File> fileList = new ArrayList<>();
-        fileList.add(new File("D:/Java/jdk1.7.0_45_64bit/bin/jar.exe"));
-        fileList.add(new File("D:/Java/jdk1.7.0_45_64bit/bin/java.exe"));
-        FileOutputStream fos2 = new FileOutputStream(new File("c:/mytest02.zip"));
-        FileUtil.toZip(fileList, fos2);
 
+    // doc转换为html
+    public static void docToHtml() throws Exception {
+        String sourceFileName = "D:\\kevinliu\\workspaces\\estm-master\\audit\\201810091030502495\\test\\test.doc";
+        String targetFileName = "D:\\kevinliu\\workspaces\\estm-master\\audit\\201810091030502495\\test\\test.html";
+        final String imagePathStr = "D:\\kevinliu\\workspaces\\estm-master\\audit\\201810091030502495\\test\\image\\";
+        HWPFDocument wordDocument = new HWPFDocument(new FileInputStream(sourceFileName));
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(document);
+        // 保存图片，并返回图片的相对路径
+        wordToHtmlConverter.setPicturesManager(new PicturesManager() {
+            @Override
+            public String savePicture(byte[] content, PictureType pictureType, String name, float width, float height) {
+                try (FileOutputStream out = new FileOutputStream(imagePathStr + name)) {
+                    out.write(content);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "image/" + name;
+            }
+        });
+        wordToHtmlConverter.processDocument(wordDocument);
+        Document htmlDocument = wordToHtmlConverter.getDocument();
+        DOMSource domSource = new DOMSource(htmlDocument);
+        StreamResult streamResult = new StreamResult(new File(targetFileName));
+
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer serializer = tf.newTransformer();
+        serializer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+        serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+        serializer.setOutputProperty(OutputKeys.METHOD, "html");
+        serializer.transform(domSource, streamResult);
+    }
+
+    // docx转换为html
+    public static void docxToHtml(String sourceFileName, String targetFileName, String imagePathStr) throws Exception {
+        OutputStreamWriter outputStreamWriter = null;
+        try {
+            XWPFDocument document = new XWPFDocument(new FileInputStream(sourceFileName));
+            XHTMLOptions options = XHTMLOptions.create();
+            // 存放图片的文件夹
+            options.setExtractor(new FileImageExtractor(new File(imagePathStr)));
+            // html中图片的路径
+            options.URIResolver(new BasicURIResolver("image"));
+            outputStreamWriter = new OutputStreamWriter(new FileOutputStream(targetFileName), "utf-8");
+            XHTMLConverter xhtmlConverter = (XHTMLConverter) XHTMLConverter.getInstance();
+            xhtmlConverter.convert(document, outputStreamWriter, options);
+        } finally {
+            if (outputStreamWriter != null) {
+                outputStreamWriter.close();
+            }
+        }
     }
 }

@@ -4,13 +4,11 @@ import com.yucheng.estm.utils.FileUtil;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,35 +16,31 @@ import java.util.Map;
 public class UploadAndDownLoadController {
     private static Logger log = Logger.getLogger(UploadAndDownLoadController.class);
 
-    @RequestMapping(value = "downloadall")
-    public void test(String orderId, HttpServletResponse response) {
-
-        String basePath = "audit"+ File.separator + orderId + File.separator;
-
-        //1. 将申请表填充后保存
-        try {
-            String fileRealPath = basePath + "bdcsqb.doc";
-            File templateFile = ResourceUtils.getFile("classpath:templates/word/test1.docx");
-            Map<String,String> properties = new HashMap<>();
-            properties.put("title", "申请书");
-            FileUtil.createDocByTemplate(fileRealPath, templateFile,properties);
-        } catch (FileNotFoundException e) {
-            log.error(e);
-            throw new RuntimeException("资料异常");
+    /**
+     * 打印word
+     */
+    @RequestMapping(value = "print/{req_cert}")
+    public void printDoc(HttpServletResponse response, String orderId){
+        String htmlPath ="";
+        try (FileInputStream in = new FileInputStream(htmlPath);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
+             OutputStream outputStream = response.getOutputStream();
+        ){
+            byte[] b = new byte[bufferedInputStream.available()];
+            bufferedInputStream.read(b);
+            outputStream.write(b);
+            outputStream.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(),e);
         }
+    }
 
-        //2. 将具结承诺书填充后保存
-        try {
-            String fileRealPath = basePath + "jjbzs.doc";
-            File templateFile = ResourceUtils.getFile("classpath:templates/word/test2.docx");
-            Map<String,String> properties = new HashMap<>();
-            properties.put("title", "申请书");
-            FileUtil.createDocByTemplate(fileRealPath, templateFile,properties);
-        } catch (FileNotFoundException e) {
-            log.error(e);
-            throw new RuntimeException("资料异常");
-        }
-
+    /**
+     * 下载所有资料
+     */
+    @RequestMapping(value = "print/download_all")
+    public void downloadAll(HttpServletResponse response, String orderId){
+        String basePath ="";
         //3.压缩文件夹并返回
         try (OutputStream out = response.getOutputStream()){
             response.setContentType("application/zip");
