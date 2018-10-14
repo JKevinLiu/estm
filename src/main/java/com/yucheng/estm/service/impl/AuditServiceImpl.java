@@ -1,8 +1,11 @@
 package com.yucheng.estm.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.yucheng.estm.constants.CommonContant;
+import com.yucheng.estm.dto.AuditDto;
 import com.yucheng.estm.dto.manager.DataImage;
 import com.yucheng.estm.entity.Audit;
+import com.yucheng.estm.entity.AuditItem;
 import com.yucheng.estm.entity.OutUser;
 import com.yucheng.estm.mapper.AuditMapper;
 import com.yucheng.estm.mapper.OutUserMapper;
@@ -45,13 +48,13 @@ public class AuditServiceImpl implements AuditService{
         String reqCertImagePath = basePath + File.separator + "image_reqcert" + File.separator;
 
         //婚姻承状况诺书
-        String marriageTemplatePath = CommonContant.reqQertWordTemplatePath;
+        String marriageTemplatePath = CommonContant.marriageWordTemplatePath;
         String marriageRealPath = basePath + "marriage.doc";
         String marriageHtmlRealPath = basePath + "marriage.html";
         String marriageImagePath = basePath + File.separator + "image_marriage" + File.separator;
 
         //具结保证书
-        String recogTemplatePath = CommonContant.reqQertWordTemplatePath;
+        String recogTemplatePath = CommonContant.recogWordTemplatePath;
         String recogRealPath = basePath + "recog.doc";
         String recogHtmlRealPath = basePath + "recog.html";
         String recogImagePath = basePath + File.separator + "image_recog" + File.separator;
@@ -82,17 +85,32 @@ public class AuditServiceImpl implements AuditService{
 
             //（异步实现）
             //生成不动产申请书html
-            FileUtil.docxToHtml(reqCertRealPath, reqCertHtmlRealPath, reqCertImagePath);
+            FileUtil.docToHtml(reqCertRealPath, reqCertHtmlRealPath, reqCertImagePath);
             //婚姻承状况诺书html
-            FileUtil.docxToHtml(marriageRealPath, marriageHtmlRealPath, marriageImagePath);
+            FileUtil.docToHtml(marriageRealPath, marriageHtmlRealPath, marriageImagePath);
             //具结保证书html
-            FileUtil.docxToHtml(recogRealPath, recogHtmlRealPath, recogImagePath);
+            FileUtil.docToHtml(recogRealPath, recogHtmlRealPath, recogImagePath);
 
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw new RuntimeException("创建审核单失败！");
         }
         return audit;
+    }
+
+    @Override
+    public PageInfo<Audit> getAuditByCondtion(int curPage, int pageSize, AuditDto auditDto) {
+        return null;
+    }
+
+    @Override
+    public List<AuditItem> getAuditItemList(int orderId) {
+        return null;
+    }
+
+    @Override
+    public Audit getAuditByOrderId(int orderId) {
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.yucheng.estm.controller;
 
+import com.yucheng.estm.constants.MessageContant;
 import com.yucheng.estm.dto.JsonResult;
 import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,10 @@ public class LoginController {
         JsonResult r = new JsonResult();
         try {
             //r.setResult(user);
-            r.setStatus("ok");
+            r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
+            r.setStatus(MessageContant.STATUS_FAIL);
             log.error(e.getMessage(), e);
         }
         return ResponseEntity.ok(r);
@@ -35,10 +36,10 @@ public class LoginController {
         JsonResult r = new JsonResult();
         try {
             //r.setResult(user);
-            r.setStatus("ok");
+            r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
+            r.setStatus(MessageContant.STATUS_FAIL);
             log.error(e.getMessage(), e);
         }
         return ResponseEntity.ok(r);

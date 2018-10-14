@@ -1,8 +1,13 @@
 package com.yucheng.estm.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.yucheng.estm.constants.CommonContant;
+import com.yucheng.estm.constants.MessageContant;
+import com.yucheng.estm.dto.AuditDto;
 import com.yucheng.estm.dto.JsonResult;
 import com.yucheng.estm.dto.manager.DataImage;
 import com.yucheng.estm.entity.Audit;
+import com.yucheng.estm.entity.AuditItem;
 import com.yucheng.estm.service.AuditService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +37,10 @@ public class AuditController {
             Audit audit = auditService.createAuditOrder(Integer.parseInt(outUserId), reqCertWord, marriageWord, recogWord, dataImageList);
 
             r.setResult(audit);
-            r.setStatus("ok");
+            r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
+            r.setStatus(MessageContant.STATUS_FAIL);
             log.error(e.getMessage(), e);
         }
         return ResponseEntity.ok(r);
@@ -45,15 +50,45 @@ public class AuditController {
      *审核单列表，分页，条件过滤
      */
     @RequestMapping(value = "/list")
-    public ResponseEntity<JsonResult> list(int state, int curPage, int pageSize){
+    public ResponseEntity<JsonResult> list(int state, int curPage, int pageSize, AuditDto auditDto){
         JsonResult r = new JsonResult();
         try {
-            //PageInfo<Order> pageInfo = orderService.getOrderList(reqPage);
-            //r.setResult(user);
-            r.setStatus("ok");
+            PageInfo<Audit> pageInfo = auditService.getAuditByCondtion(curPage, pageSize, auditDto);
+
+            r.setResult(pageInfo);
+            r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
+            r.setStatus(MessageContant.STATUS_FAIL);
+            log.error(e.getMessage(), e);
+        }
+        return ResponseEntity.ok(r);
+    }
+
+    /**
+     *开始审核
+     */
+    @RequestMapping(value = "/doAudit")
+    public ResponseEntity<JsonResult> doAudit(int orderId){
+        JsonResult r = new JsonResult();
+        try {
+            Audit audit = auditService.getAuditByOrderId(orderId);
+            int state = audit.getState();
+            if(state == CommonContant.STATE_WAITAUDIT){
+                r.setResult(true);
+                r.setDesc("审核单可以审核");
+            }else if(state == CommonContant.STATE_AUDITTING){
+                r.setResult(false);
+                r.setDesc("审核单正在被审核！");
+            }else if(state == CommonContant.STATE_AUDITPASS && state == CommonContant.STATE_AUDITBACK){
+                r.setResult(false);
+                r.setDesc("审核单已审核完成，请刷新页面！");
+            }
+            r.setStatus(MessageContant.STATUS_OK);
+
+        } catch (Exception e) {
+            r.setResult(e.getClass().getName() + ":" + e.getMessage());
+            r.setStatus(MessageContant.STATUS_FAIL);
             log.error(e.getMessage(), e);
         }
         return ResponseEntity.ok(r);
@@ -63,15 +98,15 @@ public class AuditController {
      *审核单明细条目
      */
     @RequestMapping(value = "/detail")
-    public ResponseEntity<JsonResult> auditDetail(int auditId){
+    public ResponseEntity<JsonResult> auditDetail(int orderId){
         JsonResult r = new JsonResult();
         try {
-            //PageInfo<Order> pageInfo = orderService.getOrderList(reqPage);
-            //r.setResult(user);
-            r.setStatus("ok");
+            List<AuditItem> itemList = auditService.getAuditItemList(orderId);
+            r.setResult(itemList);
+            r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
+            r.setStatus(MessageContant.STATUS_FAIL);
             log.error(e.getMessage(), e);
         }
         return ResponseEntity.ok(r);
@@ -86,10 +121,10 @@ public class AuditController {
         try {
             //PageInfo<Order> pageInfo = orderService.getOrderList(reqPage);
             //r.setResult(user);
-            r.setStatus("ok");
+            r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setResult(e.getClass().getName() + ":" + e.getMessage());
-            r.setStatus("error");
+            r.setStatus(MessageContant.STATUS_FAIL);
             log.error(e.getMessage(), e);
         }
         return ResponseEntity.ok(r);

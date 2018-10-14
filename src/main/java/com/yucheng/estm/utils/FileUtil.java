@@ -1,16 +1,21 @@
 package com.yucheng.estm.utils;
 
 import com.deepoove.poi.XWPFTemplate;
+import com.yucheng.estm.constants.CommonContant;
 import org.apache.log4j.Logger;
+import org.apache.poi.POIXMLDocument;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.converter.PicturesManager;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
 import org.apache.poi.hwpf.usermodel.PictureType;
+import org.apache.poi.hwpf.usermodel.Range;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.converter.core.BasicURIResolver;
 import org.apache.poi.xwpf.converter.core.FileImageExtractor;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.*;
+import org.springframework.util.ResourceUtils;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,9 +25,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -32,30 +35,103 @@ public class FileUtil {
     private static final int  BUFFER_SIZE = 2 * 1024;
 
     /**
-     * 根据模板生成word文件
+     * 根据模板生成word  doc文件2003
      * @param fileRealPath
      * @param templateFile
      * @param properties
      */
     public static void createDocByTemplate(String fileRealPath, File templateFile, Map<String,String> properties){
-        XWPFTemplate template = null;
 
-        try (FileOutputStream out = new FileOutputStream(fileRealPath)){
-            template = XWPFTemplate.compile(templateFile).render(properties);
-            template.write(out);
-            out.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage(),e);
-        }finally {
-            try {
-                if(template != null){
-                    template.close();
-                }
-            } catch (IOException e) {
-                log.error(e.getMessage(),e);
+        try( FileInputStream fis = new FileInputStream(templateFile);
+             ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+             OutputStream outs = new FileOutputStream(fileRealPath);) {
+
+            HWPFDocument doc = new HWPFDocument(fis);
+            Range bodyRange = doc.getRange();
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                bodyRange.replaceText("{{" + entry.getKey() + "}}", entry.getValue());
             }
-            log.debug("生成文件" + fileRealPath + " 成功！");
+            doc.write(ostream);
+            outs.write(ostream.toByteArray());
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
+            throw new RuntimeException("生成文件失败！");
         }
+
+        log.debug("生成文件" + fileRealPath + " 成功！");
+    }
+
+    /**
+     * 根据模板生成word  docx文件2007
+     * @param fileRealPath
+     * @param templateFile
+     * @param properties
+     */
+    public static void createDocxByTemplate(String fileRealPath, File templateFile, Map<String,String> properties){
+        try {
+            OPCPackage pack = POIXMLDocument.openPackage(templateFile.getPath());
+            XWPFDocument doc = new XWPFDocument(pack);
+
+            // 处理段落
+            List<XWPFParagraph> paragraphList = doc.getParagraphs();
+            for (XWPFParagraph paragraph : paragraphList) {
+                List<XWPFRun> runs = paragraph.getRuns();
+                for (XWPFRun run : runs) {
+                    String text = run.getText(0);
+                    boolean isSetText = false;
+                    for (Map.Entry<String, String> entry : properties.entrySet()) {
+                        String key = entry.getKey();
+                        if (text.indexOf(key) != -1) {
+                            isSetText = true;
+                            text = text.replace("{{" + entry.getKey() + "}}",entry.getValue());
+                        }
+                    }
+                    if (isSetText) {
+                        run.setText(text, 0);
+                    }
+                }
+            }
+
+            // 处理表格
+            Iterator<XWPFTable> it = doc.getTablesIterator();
+            while (it.hasNext()) {
+                XWPFTable table = it.next();
+                List<XWPFTableRow> rows = table.getRows();
+                for (XWPFTableRow row : rows) {
+                    List<XWPFTableCell> cells = row.getTableCells();
+                    for (XWPFTableCell cell : cells) {
+                        List<XWPFParagraph> paragraphListTable = cell.getParagraphs();
+                        for (XWPFParagraph paragraph : paragraphListTable) {
+                            List<XWPFRun> runs = paragraph.getRuns();
+                            for (XWPFRun run : runs) {
+                                String text = run.getText(0);
+                                boolean isSetText = false;
+                                for (Map.Entry<String, String> entry : properties.entrySet()) {
+                                    String key = entry.getKey();
+                                    if (text.indexOf(key) != -1) {
+                                        isSetText = true;
+                                        text = text.replace("{{" + entry.getKey() + "}}",entry.getValue());
+                                    }
+                                }
+                                if (isSetText) {
+                                    run.setText(text, 0);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            FileOutputStream fos = new FileOutputStream(fileRealPath);
+            doc.write(fos);
+            fos.flush();
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
+            throw new RuntimeException("生成文件失败！");
+        }finally {
+            //关闭流
+        }
+
+        log.info("生成文件" + fileRealPath + " 成功！");
     }
 
 
@@ -176,10 +252,8 @@ public class FileUtil {
 
 
     // doc转换为html
-    public static void docToHtml() throws Exception {
-        String sourceFileName = "D:\\kevinliu\\workspaces\\estm-master\\audit\\201810091030502495\\test\\test.doc";
-        String targetFileName = "D:\\kevinliu\\workspaces\\estm-master\\audit\\201810091030502495\\test\\test.html";
-        final String imagePathStr = "D:\\kevinliu\\workspaces\\estm-master\\audit\\201810091030502495\\test\\image\\";
+    public static void docToHtml(String sourceFileName, String targetFileName, final String imagePathStr) throws Exception {
+
         HWPFDocument wordDocument = new HWPFDocument(new FileInputStream(sourceFileName));
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(document);
@@ -226,5 +300,24 @@ public class FileUtil {
                 outputStreamWriter.close();
             }
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        String basePath = "audit"+ File.separator + "249520181013123030" + File.separator;
+
+        //不动产申请书
+        String reqCertTemplatePath = CommonContant.reqQertWordTemplatePath;
+        String reqCertRealPath = basePath + "reqcert.doc";
+        Map<String, String> reqCertWord = new HashMap<>();
+        reqCertWord.put("attr1","你好");
+        String reqCertHtmlRealPath = basePath + "reqcert.html";
+        String reqCertImagePath = basePath + File.separator + "image_reqcert" + File.separator;
+
+        //生成不动产申请书doc
+        File reqCertTemplate = new File("E:\\workspaces\\estm\\src\\main\\resources\\templates\\word\\reqcert.doc");
+        FileUtil.createDocByTemplate(reqCertRealPath, reqCertTemplate, reqCertWord);
+
+        //生成不动产申请书html
+        FileUtil.docToHtml(reqCertRealPath, reqCertHtmlRealPath, reqCertImagePath);
     }
 }

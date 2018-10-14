@@ -10,5 +10,5 @@ public class CommonContant {
     public static int STATE_WAITAUDIT = 0;   //等待审核
     public static int STATE_AUDITTING = 1;   //审核中
     public static int STATE_AUDITPASS = 2;   //审核通过
-    public static int STATE_AUDITBACK = 1;   //审核不通过
+    public static int STATE_AUDITBACK = 3;   //审核不通过
 }
