@@ -1,0 +1,10 @@
+﻿
+ /*表格分页*/
+.dataTables_info {
+    float: left;
+    width: 60%;
+}
+
+.dataTables_paginate.paging_bootstrap.pagination {
+    padding-top: 0px;
+}

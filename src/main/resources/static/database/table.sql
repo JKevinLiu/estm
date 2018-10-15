@@ -40,8 +40,9 @@ create table t_audit
 (
    id                   int not null,
    order_no             varchar(18),
-   bus_type             varchar(80),
-   out_user_id          int,
+   bus_type             int,
+   out_name             varchar(40),
+   out_phone            varchar(30),
    audit_user_id        int,
    state                int,
    create_date          datetime,

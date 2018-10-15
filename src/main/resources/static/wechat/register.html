@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>微信授权</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="./Content/weui.css" />
+    <link rel="stylesheet" href="./Content/custom.css" />
+</head>
+<body>
+    <div class="page" id="mainPage">
+        <div class="page__hd">
+            <h1 class="page__title"><img src="./Content/images/logo.png"></h1>
+            <p class="page__desc">微信授权</p>
+        </div>
+        <div class="page__bd">
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">手机号：</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入手机号码" />
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"> <label class="weui-label">姓&nbsp;&nbsp;&nbsp;&nbsp;名：</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="password" placeholder="请输入姓名">
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary" href="javascript:GotoLevel1()" id="btnRegister">确定</a>
+                <a href="./index.html" class="weui-btn weui-btn_plain-default">返回</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="./Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    function GotoLevel1() {
+        window.location.href = "level1.html";
+    }
+</script>

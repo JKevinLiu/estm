@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>模拟首页</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="./Content/weui.css" />
+    <link rel="stylesheet" href="./Content/custom.css" />
+    <style>
+        .weui-tab {
+            height:600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page" id="mainPage">
+        <div class="weui-tab" id="weui-tab">
+            <div class="weui-tab__panel">
+                <div style="text-align:center">
+                    <div id="tab1">
+                        <div class="page__hd">
+                            <h1 class="page__title"><img src="./Content/images/logo.png"></h1>
+                            <h1 style="text-align:center;">模拟微信入口</h1>
+                            <p style="text-indent: 2em">由于测试号只能通过api方式设置菜单，为了方便查看效果，特制作本页面实现模拟效果。</p>
+                        </div>
+                    </div>
+                    <div id="tab2" style="display: none;">
+                        
+                    </div>
+                    <div id="tab3" style="display: none;">
+                        <div style="height:150px;">
+                            <p>模拟菜单连接</p>
+                            <p>说明：实际不能存在此页面，实际是在微信菜单下边点击链接，弹出子菜单进入相应页面</p>
+                        </div>
+                        <a href="javascript:;" class="weui-btn weui-btn_primary">关于我们</a>
+                        <a href="javascript:;" class="weui-btn weui-btn_primary">办事指南</a>
+                    </div>
+                    <div id="tab4" style="display: none;">
+                    </div>
+                </div>
+                <div class="weui-tabbar">
+                    <a href="#tab1" class="weui-tabbar__item weui-bar__item_on">
+                        <img src="../assets/images/trys.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">说明</p>
+                    </a>
+                    <a href="./register.html" class="weui-tabbar__item">
+                        <img src="../assets/images/trys.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">材料预审</p>
+                    </a>
+                    <a href="#tab3" class="weui-tabbar__item">
+                        <img src="../assets/images/trys.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">帮助中心</p>
+                    </a>
+                    <a href="./my-apply.html" class="weui-tabbar__item">
+                        <img src="../assets/images/trys.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">我</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+<script src="./Scripts/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+    $('.weui-tabbar__item').on('click', function () {
+      $(this).addClass('weui-bar__item_on').siblings().removeClass('weui-bar__item_on');
+      var tabId = $(this).attr('href');
+      $('.weui-tab__panel').find(tabId).show().siblings().hide();
+    });
+  });
+</script>

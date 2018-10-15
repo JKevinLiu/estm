@@ -7,9 +7,11 @@ public class Audit {
 
     private String orderNo;
 
-    private String busType;
+    private Integer busType;
 
-    private Integer outUserId;
+    private String outName;
+
+    private String outPhone;
 
     private Integer auditUserId;
 
@@ -37,20 +39,28 @@ public class Audit {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 
-    public String getBusType() {
+    public Integer getBusType() {
         return busType;
     }
 
-    public void setBusType(String busType) {
-        this.busType = busType == null ? null : busType.trim();
+    public void setBusType(Integer busType) {
+        this.busType = busType;
     }
 
-    public Integer getOutUserId() {
-        return outUserId;
+    public String getOutName() {
+        return outName;
     }
 
-    public void setOutUserId(Integer outUserId) {
-        this.outUserId = outUserId;
+    public void setOutName(String outName) {
+        this.outName = outName == null ? null : outName.trim();
+    }
+
+    public String getOutPhone() {
+        return outPhone;
+    }
+
+    public void setOutPhone(String outPhone) {
+        this.outPhone = outPhone == null ? null : outPhone.trim();
     }
 
     public Integer getAuditUserId() {

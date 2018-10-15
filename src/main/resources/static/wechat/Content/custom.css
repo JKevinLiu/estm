@@ -1,0 +1,35 @@
+﻿
+.page__title {
+    text-align: center;
+}
+
+    .page__title img {
+        width: 120px;
+    }
+
+.page__desc {
+    text-align: center;
+}
+
+
+/*针对不同浏览器设置placeholder颜色，主要用在申请书*/
+::-webkit-input-placeholder { /* WebKit browsers */
+    color: #cdc9c9;
+}
+
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #cdc9c9;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #cdc9c9;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #cdc9c9;
+}
+
+.consumer-weui-cells {   /*资料上传页面底部样式*/
+    border-bottom: 1px solid #a6a3a3
+}
+

@@ -3,11 +3,10 @@ package com.yucheng.estm.controller;
 import com.github.pagehelper.PageInfo;
 import com.yucheng.estm.constants.CommonContant;
 import com.yucheng.estm.constants.MessageContant;
-import com.yucheng.estm.dto.AuditDto;
 import com.yucheng.estm.dto.JsonResult;
 import com.yucheng.estm.dto.manager.DataImage;
+import com.yucheng.estm.entity.AliasAudit;
 import com.yucheng.estm.entity.Audit;
-import com.yucheng.estm.entity.AuditItem;
 import com.yucheng.estm.service.AuditService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,11 @@ public class AuditController {
 
     @Autowired
     private AuditService auditService;
+
+
+
+
+
     /**
      * 生成审核单
      */
@@ -39,9 +43,8 @@ public class AuditController {
             r.setResult(audit);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }
@@ -50,29 +53,28 @@ public class AuditController {
      *审核单列表，分页，条件过滤
      */
     @RequestMapping(value = "/list")
-    public ResponseEntity<JsonResult> list(int state, int curPage, int pageSize, AuditDto auditDto){
+    public ResponseEntity<JsonResult> list(int curPage, int pageSize, Audit audit){
         JsonResult r = new JsonResult();
         try {
-            PageInfo<Audit> pageInfo = auditService.getAuditByCondtion(curPage, pageSize, auditDto);
+            PageInfo<Audit> pageInfo = auditService.getAuditByCondtion(curPage, pageSize, audit);
 
             r.setResult(pageInfo);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }
 
     /**
-     *开始审核
+     *开始审核校验
      */
     @RequestMapping(value = "/doAudit")
-    public ResponseEntity<JsonResult> doAudit(int orderId){
+    public ResponseEntity<JsonResult> doAudit(String orderNo){
         JsonResult r = new JsonResult();
         try {
-            Audit audit = auditService.getAuditByOrderId(orderId);
+            Audit audit = auditService.getAuditByOrderNo(orderNo);
             int state = audit.getState();
             if(state == CommonContant.STATE_WAITAUDIT){
                 r.setResult(true);
@@ -87,9 +89,8 @@ public class AuditController {
             r.setStatus(MessageContant.STATUS_OK);
 
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }
@@ -98,16 +99,15 @@ public class AuditController {
      *审核单明细条目
      */
     @RequestMapping(value = "/detail")
-    public ResponseEntity<JsonResult> auditDetail(int orderId){
+    public ResponseEntity<JsonResult> auditDetail(String orderNo){
         JsonResult r = new JsonResult();
         try {
-            List<AuditItem> itemList = auditService.getAuditItemList(orderId);
-            r.setResult(itemList);
+            List<AliasAudit> aliasList = auditService.auditAliasInfo(orderNo);
+            r.setResult(aliasList);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }
@@ -123,9 +123,8 @@ public class AuditController {
             //r.setResult(user);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }

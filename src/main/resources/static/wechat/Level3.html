@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>所需材料列表页</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link rel="stylesheet" href="./Content/weui.css" />
+    <link rel="stylesheet" href="./Content/custom.css" />
+</head>
+<body>
+    <div class="page">
+        <div class="page__bd" style="height: 100%;">
+            <div class="weui-tab">
+                <div class="weui-navbar">
+                    <div href="#person" class="weui-navbar__item weui-bar__item_on">
+                        个人
+                    </div>
+                    <div href="#entgerprise" class="weui-navbar__item">
+                        法人
+                    </div>
+                </div>
+                <div class="weui-tab__panel">
+                    <div id="person" class="weui-tab__content" style="display: block;">
+                        <!--person start-->
+                        <div class="weui-cells">
+                            <a class="weui-cell weui-cell_access" href="./application.html">
+                                <div class="weui-cell__bd">
+                                    <p>不动产登记申请书</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                </div>
+                            </a>
+                            <a class="weui-cell weui-cell_access" href="./uploadfile.html">
+                                <div class="weui-cell__bd">
+                                    <p>登记证明文件</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                </div>
+                            </a>
+                            <a class="weui-cell weui-cell_access" href="./recognizance.html">
+                                <div class="weui-cell__bd">
+                                    <p>具结保证书</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                </div>
+                            </a>
+                            <a class="weui-cell weui-cell_access" href="./marriage.html">
+                                <div class="weui-cell__bd">
+                                    <p>婚姻状态承诺书</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                </div>
+                            </a>
+                        </div>
+                        <!--person end-->
+                        <br />
+                        <a href="javascript:;" class="weui-btn weui-btn_primary">提交审核</a>
+                        <a href="./Level2.html" class="weui-btn weui-btn_plain-default">返回</a>
+                    </div>
+                    <div id="entgerprise" class="weui-tab__content">暂无</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="./Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(function () {
+        $('.weui-navbar__item').on('click', function () {
+            $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+            $(jQuery(this).attr("href")).show().siblings('.weui-tab__content').hide();
+        });
+
+    });
+</script>

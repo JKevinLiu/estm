@@ -1,14 +1,19 @@
 package com.yucheng.estm.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yucheng.estm.config.InitCommonContext;
 import com.yucheng.estm.constants.CommonContant;
-import com.yucheng.estm.dto.AuditDto;
 import com.yucheng.estm.dto.manager.DataImage;
+import com.yucheng.estm.entity.AliasAudit;
 import com.yucheng.estm.entity.Audit;
 import com.yucheng.estm.entity.AuditItem;
 import com.yucheng.estm.entity.OutUser;
+import com.yucheng.estm.config.AuditAliasStrategyFactory;
+import com.yucheng.estm.mapper.AuditItemMapper;
 import com.yucheng.estm.mapper.AuditMapper;
 import com.yucheng.estm.mapper.OutUserMapper;
+import com.yucheng.estm.service.AuditAliasStrategy;
 import com.yucheng.estm.service.AuditService;
 import com.yucheng.estm.utils.FileUtil;
 import com.yucheng.estm.utils.OrderUtil;
@@ -31,6 +36,12 @@ public class AuditServiceImpl implements AuditService{
 
     @Autowired
     private AuditMapper auditMapper;
+
+    @Autowired
+    private AuditItemMapper auditItemMapper;
+
+    @Autowired
+    private AuditAliasStrategyFactory auditAliasStrategyFactory;
 
     @Override
     public Audit createAuditOrder(int outUserId, Map<String, String> reqCertWord, Map<String, String> marriageWord,
@@ -76,10 +87,11 @@ public class AuditServiceImpl implements AuditService{
             //TODO
 
             audit.setOrderNo(orderNo);
-            audit.setOutUserId(outUserId);
+            audit.setOutName(outUser.getName());
+            audit.setOutPhone(outUser.getPhone());
             audit.setState(CommonContant.STATE_WAITAUDIT);
             audit.setDirPath(basePath);
-            audit.setBusType("个人");
+            audit.setBusType(1);
             audit.setCreateDate(Calendar.getInstance().getTime());
             auditMapper.insert(audit);
 
@@ -99,18 +111,53 @@ public class AuditServiceImpl implements AuditService{
     }
 
     @Override
-    public PageInfo<Audit> getAuditByCondtion(int curPage, int pageSize, AuditDto auditDto) {
-        return null;
+    public PageInfo<Audit> getAuditByCondtion(int curPage, int pageSize, Audit audit) {
+        try{
+            PageHelper.startPage(curPage, pageSize);
+            List<Audit> auditList = auditMapper.selectListByCondition(audit);
+            PageInfo<Audit> pageInfo = new PageInfo<>(auditList);
+            return pageInfo;
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("查询audit异常！");
+        }
+
     }
 
     @Override
-    public List<AuditItem> getAuditItemList(int orderId) {
-        return null;
+    public List<AliasAudit> auditAliasInfo(String orderNo) {
+
+        List<AliasAudit> aliasList = null;
+        try{
+
+            Audit audit = auditMapper.selectByOrderNo(orderNo);
+            int busType = audit.getBusType();
+
+            String strategyType = InitCommonContext.getBusTypeMap().get("common");
+
+            //根据busType从工厂中找到对应的策略
+            AuditAliasStrategy auditAliasStrategy = auditAliasStrategyFactory.getAuditAliasStrategy(strategyType);
+
+            List<AuditItem> itemList = auditItemMapper.selectListByOrderNo(orderNo);
+
+            aliasList = auditAliasStrategy.MergeItemForAlias(itemList);
+
+            return aliasList;
+
+        }catch(Exception e){
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("系统异常！");
+        }
     }
 
     @Override
-    public Audit getAuditByOrderId(int orderId) {
-        return null;
+    public Audit getAuditByOrderNo(String orderNo) {
+        try {
+            return auditMapper.selectByOrderNo(orderNo);
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("查询audit异常！");
+        }
     }
 
 }

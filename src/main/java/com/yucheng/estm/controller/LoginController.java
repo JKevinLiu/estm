@@ -21,9 +21,8 @@ public class LoginController {
             //r.setResult(user);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }
@@ -38,9 +37,8 @@ public class LoginController {
             //r.setResult(user);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
-            r.setResult(e.getClass().getName() + ":" + e.getMessage());
             r.setStatus(MessageContant.STATUS_FAIL);
-            log.error(e.getMessage(), e);
+            r.setDesc(e.getMessage());
         }
         return ResponseEntity.ok(r);
     }
