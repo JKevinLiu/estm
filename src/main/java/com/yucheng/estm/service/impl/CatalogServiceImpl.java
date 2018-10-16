@@ -7,20 +7,21 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
-public class CatalogServiceImpl implements CatalogService, InitializingBean {
+public class CatalogServiceImpl implements CatalogService {
 
     @Autowired
     private CatalogMapper catalogMapper;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-
+    public List<Catalog> getCatalogListByParentId(Integer parentId){
+        List<Catalog> catalogList = catalogMapper.selectChildListByParentId(parentId);
+        return catalogList;
     }
 
-    @Override
-    public Catalog getCatalogTree() {
-        return null;
-        //return catalogMapper.select;
-    }
+
 }

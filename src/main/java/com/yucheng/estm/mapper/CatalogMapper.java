@@ -19,8 +19,5 @@ public interface CatalogMapper {
 
     int updateByPrimaryKey(Catalog record);
 
-    List<Catalog> selectChildListById(Integer id);
-
     List<Catalog> selectChildListByParentId(Integer parentId);
-
 }

@@ -1,5 +1,5 @@
 ﻿
- /*表格分页*/
+/*表格分页*/
 .dataTables_info {
     float: left;
     width: 60%;
@@ -8,3 +8,9 @@
 .dataTables_paginate.paging_bootstrap.pagination {
     padding-top: 0px;
 }
+
+/*审核页面文件列表*/
+.state-overview .state-value {
+    width: 100%;
+}
+

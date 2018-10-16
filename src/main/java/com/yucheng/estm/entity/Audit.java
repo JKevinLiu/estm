@@ -23,6 +23,8 @@ public class Audit {
 
     private String dirPath;
 
+    private String remark;
+
     public Integer getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class Audit {
 
     public void setDirPath(String dirPath) {
         this.dirPath = dirPath == null ? null : dirPath.trim();
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 }

@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+    <title>材料审核</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet">
+    <link href="css/cuntom.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="sticky-header">
+    <section>
+        <!-- left side start-->
+        <div class="left-side sticky-left-side">
+            <!--logo and iconic logo start-->
+            <div class="logo">
+                <a href="javascript:;"><img src="images/logo.png" alt=""></a>
+            </div>
+            <div class="logo-icon text-center">
+                <a href="javascript:;"><img src="images/logo_icon.png" alt=""></a>
+            </div>
+            <!--logo and iconic logo end-->
+
+            <div class="left-side-inner">
+                <!--sidebar nav start-->
+                <ul class="nav nav-pills nav-stacked custom-nav">
+                    <li class="menu-list">
+                        <a href=""><i class="fa fa-laptop"></i> <span>预留功能</span></a>
+                        <ul class="sub-menu-list">
+                            <li><a href="#">预留菜单</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-list nav-active">
+                        <a href=""><i class="fa fa-book"></i> <span>材料审核</span></a>
+                        <ul class="sub-menu-list">
+                            <li class="active"><a href="./checklist.html"> 待审材料</a></li>
+                            <li><a href="./checkedlist.html">已审材料</a></li>
+                            <li><a href="./returnlist.html">打回记录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!--sidebar nav end-->
+            </div>
+        </div>
+        <!-- left side end-->
+        <!-- main content start-->
+        <div class="main-content">
+            <!-- header section start-->
+            <div class="header-section">
+                <!--toggle button start-->
+                <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+                <!--toggle button end-->
+                <!--notification menu start -->
+                <div class="menu-right">
+                    <ul class="notification-menu">
+                        <li>
+                            <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <img src="images/photos/user-avatar.png" alt="" />
+                                马云
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                                <li><a href="#"><i class="fa fa-user"></i>  密码修改</a></li>
+                                <li><a href="./login.html"><i class="fa fa-sign-out"></i> 退出登陆</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!--notification menu end -->
+            </div>
+            <!-- header section end-->
+            <!-- page heading start-->
+            <div class="page-heading">
+                <h3>
+                    材料审核
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">材料审核</a>
+                    </li>
+                    <li class="active"> 查看资料</li>
+                </ul>
+            </div>
+            <!-- page heading end-->
+            <!--body wrapper start-->
+            <div class="wrapper">
+                <!--材料列表 start-->
+                <section class="panel">
+                    <header class="panel-heading">
+                        <span style="font-size:20px;">材料列表</span>
+                        <span class="tools pull-right">
+                            <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        </span>
+                    </header>
+                    <div class="panel-body" style="display: block;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!--statistics start-->
+                                <div class="row state-overview">
+                                    <div class="col-md-2 col-xs-6 col-sm-12">
+                                        <div class="panel purple" onclick="checkApplication()">
+                                            <div class="state-value">
+                                                <div class="value">不动产登记申请书</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-6 col-sm-12">
+                                        <div class="panel blue" onclick="checkUploadfile()">
+                                            <div class="state-value">
+                                                <div class="value">证明材料</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-6 col-sm-12">
+                                        <div class="panel red" onclick="checkRecognizancee()">
+                                            <div class="state-value">
+                                                <div class="value">具结保证书</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-xs-6 col-sm-12">
+                                        <div class="panel green" onclick="checkMarriage()">
+                                            <div class="state-value">
+                                                <div class="value">婚姻状况承诺书</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--statistics end-->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--材料列表 end-->
+                <!--审核 start-->
+                <section class="panel">
+                    <header class="panel-heading">
+                        <span style="font-size:20px;">审核意见</span>
+                        <span class="tools pull-right">
+                            <a class="fa fa-chevron-down" href="javascript:;"></a>
+                        </span>
+                    </header>
+                    <div class="panel-body" style="display: block;">
+                        <section class="panel">
+                            <header class="panel-heading custom-tab">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#tabPass" data-toggle="tab">
+                                            <i class="fa fa-thumbs-up"></i>
+                                            审核通过
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#tabRefuse" data-toggle="tab">
+                                            <i class="fa fa-times"></i>
+                                            打回重填
+                                        </a>
+                                    </li>
+                                </ul>
+                            </header>
+                            <div class="panel-body">
+                                <div class="tab-content">
+                                    <!--pass start-->
+                                    <div class="tab-pane  active" id="tabPass">
+                                        <form class="form-inline">
+                                            <div class="form-group">
+                                                <label class="_control-label">前往中心办理时间：</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-info _btn" type="button" onclick="checkPass()"><i class="fa fa-star"></i> 审核通过</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!--pass end-->
+                                    <!--refuse start-->
+                                    <div class="tab-pane" id="tabRefuse">
+                                        <form class="form-inline">
+                                            <div class="form-group">
+                                                <label class="_control-label">打回备注：</label>
+                                                <textarea cols="50" rows="10"></textarea>
+                                            </div>
+                                            <div class="form-group" style="vertical-align: bottom;margin-left: 20px;margin-bottom: 10px;">
+                                                <button class="btn btn-info _btn" type="button" onclick="checkPass()"><i class="fa fa-reply-all"></i> 打回</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!--refuse start-->
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+                <!--审核 end-->
+            </div>
+            <!--body wrapper end-->
+            <!--footer section start-->
+            <footer>
+                2018 &copy; Power by 雨城区小分队
+            </footer>
+            <!--footer section end-->
+
+        </div>
+        <!-- main content end-->
+    </section>
+    <!-- Placed js at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery-ui-1.9.2.custom.min.js"></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr.min.js"></script>
+    <script src="js/jquery.nicescroll.js"></script>
+    <!--common scripts for all pages-->
+    <script src="js/scripts.js"></script>
+</body>
+</html>
+
+<!--不动产登记申请书div  start-->
+<div aria-hidden="true" role="dialog" tabindex="-1" id="divApplication" class="modal fade" data-backdrop='static'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">不动产登记申请书</h4>
+            </div>
+            <div class="modal-body">
+                加载申请书word文档，或word文档转换后的html文件
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--不动产登记申请书div  end-->
+
+<!--证明材料 start-->
+<div aria-hidden="true" role="dialog" tabindex="-1" id="divUploadfile" class="modal fade" data-backdrop='static'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">证明材料</h4>
+            </div>
+            <div class="modal-body">
+                <section class="panel">
+                    <header class="panel-heading">
+                        申请人身份证明资料
+                    </header>
+                    <div class="panel-body" style="display: block;">
+                        <div id="gallery" class="media-gal">
+                            <div class="images item ">
+                                <a href="#myModal" data-toggle="modal">
+                                    <img src="./images/logo.png" alt="" />
+                                </a>
+                                <p>logo </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="panel">
+                    <header class="panel-heading">
+                        不动产权书
+                    </header>
+                    <div class="panel-body" style="display: block;">
+                        <div id="gallery" class="media-gal">
+                            <div class="images item ">
+                                <a href="#myModal" data-toggle="modal">
+                                    <img src="./images/logo.png" alt="" />
+                                </a>
+                                <p>logo.png </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--证明材料 end-->
+
+<!--具结保证书 start-->
+<div aria-hidden="true" role="dialog" tabindex="-1" id="divRecognizancee" class="modal fade" data-backdrop='static'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">具结保证书</h4>
+            </div>
+            <div class="modal-body">
+                加载具结保证书word文档，或word文档转换后的html文件
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--具结保证书 end-->
+
+<!--婚姻状况承诺书 start-->
+<div aria-hidden="true" role="dialog" tabindex="-1" id="divMarriage" class="modal fade" data-backdrop='static'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h4 class="modal-title">婚姻状况承诺书</h4>
+            </div>
+            <div class="modal-body">
+                加载婚姻状况承诺书word文档，或word文档转换后的html文件
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--婚姻状况承诺书 end-->
+
+<script>
+    //申请书
+    function checkApplication() {
+        $("#divApplication").modal("show");
+    }
+
+    //证明材料
+    function checkUploadfile() {
+        $("#divUploadfile").modal("show");
+    }
+    
+    //具结保证书
+    function checkRecognizancee() {
+        $("#divRecognizancee").modal("show");
+    }
+
+    //婚姻状况承诺书
+    function checkMarriage() {
+        $("#divMarriage").modal("show");
+    }
+
+    function checkPass() {
+        window.location.href = "./checklist.html";
+    }
+</script>

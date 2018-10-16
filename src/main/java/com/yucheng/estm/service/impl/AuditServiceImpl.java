@@ -4,8 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yucheng.estm.config.InitCommonContext;
 import com.yucheng.estm.constants.CommonContant;
+import com.yucheng.estm.dto.AuditDto;
+import com.yucheng.estm.dto.ItemDto;
 import com.yucheng.estm.dto.manager.DataImage;
-import com.yucheng.estm.entity.AliasAudit;
 import com.yucheng.estm.entity.Audit;
 import com.yucheng.estm.entity.AuditItem;
 import com.yucheng.estm.entity.OutUser;
@@ -15,6 +16,7 @@ import com.yucheng.estm.mapper.AuditMapper;
 import com.yucheng.estm.mapper.OutUserMapper;
 import com.yucheng.estm.service.AuditAliasStrategy;
 import com.yucheng.estm.service.AuditService;
+import com.yucheng.estm.utils.DateUtil;
 import com.yucheng.estm.utils.FileUtil;
 import com.yucheng.estm.utils.OrderUtil;
 import org.apache.log4j.Logger;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -111,12 +114,44 @@ public class AuditServiceImpl implements AuditService{
     }
 
     @Override
-    public PageInfo<Audit> getAuditByCondtion(int curPage, int pageSize, Audit audit) {
+    public PageInfo<AuditDto> getAuditByCondtion(int curPage, int pageSize, Audit audit) {
         try{
             PageHelper.startPage(curPage, pageSize);
             List<Audit> auditList = auditMapper.selectListByCondition(audit);
-            PageInfo<Audit> pageInfo = new PageInfo<>(auditList);
-            return pageInfo;
+
+            List<AuditDto> auditDtoList = new ArrayList<>();
+
+            for(Audit auditBo : auditList){
+                AuditDto auditDto = new AuditDto();
+                auditDto.setOutUserName(auditBo.getOutName());
+                auditDto.setOrderNo(auditBo.getOrderNo());
+                auditDto.setAuditDate(DateUtil.formatYYYYMMDDHHmmss(auditBo.getAuditDate()));
+                auditDto.setCreateDate(DateUtil.formatYYYYMMDDHHmmss(auditBo.getCreateDate()));
+                auditDto.setBusType(InitCommonContext.getCatalogNameMap().get(auditBo.getBusType()));
+                auditDto.setOutPhone(auditBo.getOutPhone());
+
+                int state = auditBo.getState();
+
+                switch (state){
+                    case CommonContant.STATE_WAITAUDIT:
+                        auditDto.setState(CommonContant.STATE_WAITAUDIT_DESC);
+                        break;
+                    case CommonContant.STATE_AUDITTING:
+                        auditDto.setState(CommonContant.STATE_AUDITTING_DESC);
+                        break;
+                    case CommonContant.STATE_AUDITPASS:
+                        auditDto.setState(CommonContant.STATE_AUDITPASS_DESC);
+                        break;
+                    case CommonContant.STATE_AUDITBACK:
+                        auditDto.setState(CommonContant.STATE_AUDITBACK_DESC);
+                        break;
+                }
+
+                auditDtoList.add(auditDto);
+            }
+
+            return new PageInfo<>(auditDtoList);
+
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw new RuntimeException("查询audit异常！");
@@ -125,24 +160,21 @@ public class AuditServiceImpl implements AuditService{
     }
 
     @Override
-    public List<AliasAudit> auditAliasInfo(String orderNo) {
+    public List<List<ItemDto>> auditAliasInfo(String orderNo) {
 
-        List<AliasAudit> aliasList = null;
         try{
-
             Audit audit = auditMapper.selectByOrderNo(orderNo);
-            int busType = audit.getBusType();
-
-            String strategyType = InitCommonContext.getBusTypeMap().get("common");
 
             //根据busType从工厂中找到对应的策略
-            AuditAliasStrategy auditAliasStrategy = auditAliasStrategyFactory.getAuditAliasStrategy(strategyType);
+            AuditAliasStrategy auditAliasStrategy = auditAliasStrategyFactory.getAuditAliasStrategy(audit.getBusType());
+
+            if(auditAliasStrategy == null){
+                throw new Exception("无法找到该业务对应的处理策略！");
+            }
 
             List<AuditItem> itemList = auditItemMapper.selectListByOrderNo(orderNo);
 
-            aliasList = auditAliasStrategy.MergeItemForAlias(itemList);
-
-            return aliasList;
+            return auditAliasStrategy.MergeItemForAlias(itemList);
 
         }catch(Exception e){
             log.error(e.getMessage(), e);
@@ -158,6 +190,11 @@ public class AuditServiceImpl implements AuditService{
             log.error(e.getMessage(), e);
             throw new RuntimeException("查询audit异常！");
         }
+    }
+
+    @Override
+    public void commitAudit(int auditId, List<AuditItem> auditItemList, boolean isSuccess, String sendDate, String reson) {
+
     }
 
 }

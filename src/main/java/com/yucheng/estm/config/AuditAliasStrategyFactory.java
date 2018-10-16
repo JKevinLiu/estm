@@ -16,8 +16,9 @@ public class AuditAliasStrategyFactory {
     @Autowired
     private final Map<String, AuditAliasStrategy> strategyMap = new ConcurrentHashMap<>();
 
-    public AuditAliasStrategy getAuditAliasStrategy(String busType){
-        return this.strategyMap.get(busType);
+    public AuditAliasStrategy getAuditAliasStrategy(int busType){
+        String strategyType = InitCommonContext.getBusTypeMap().get(busType);
+        return this.strategyMap.get(strategyType);
     }
 
 }

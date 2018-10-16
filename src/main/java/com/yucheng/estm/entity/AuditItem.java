@@ -13,10 +13,6 @@ public class AuditItem {
 
     private String path;
 
-    private Integer passed;
-
-    private String reson;
-
     public Integer getId() {
         return id;
     }
@@ -63,21 +59,5 @@ public class AuditItem {
 
     public void setPath(String path) {
         this.path = path == null ? null : path.trim();
-    }
-
-    public Integer getPassed() {
-        return passed;
-    }
-
-    public void setPassed(Integer passed) {
-        this.passed = passed;
-    }
-
-    public String getReson() {
-        return reson;
-    }
-
-    public void setReson(String reson) {
-        this.reson = reson == null ? null : reson.trim();
     }
 }

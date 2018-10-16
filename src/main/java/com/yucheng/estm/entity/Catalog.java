@@ -9,6 +9,8 @@ public class Catalog {
 
     private String name;
 
+    private String busCode;
+
     private List<Catalog> childList;
 
     public Integer getId() {
@@ -33,6 +35,14 @@ public class Catalog {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getBusCode() {
+        return busCode;
+    }
+
+    public void setBusCode(String busCode) {
+        this.busCode = busCode == null ? null : busCode.trim();
     }
 
     public List<Catalog> getChildList() {
