@@ -12,7 +12,7 @@
     id, name, phone, open_id, create_date
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_out_user
     where id = #{id,jdbcType=INTEGER}
@@ -25,10 +25,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_out_user (name, phone, open_id, 
-      create_date)
-    values (#{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP})
+    insert into t_out_user (name, phone, open_id,
+    create_date)
+    values (#{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR},
+    #{createDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yucheng.estm.entity.OutUser" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >

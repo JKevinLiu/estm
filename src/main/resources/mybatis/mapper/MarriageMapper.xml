@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yucheng.estm.mapper.MarriageMapper" >
+    <resultMap id="BaseResultMap" type="com.yucheng.estm.entity.Marriage" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="audit_item_id" property="auditItemId" jdbcType="INTEGER" />
+        <result column="cur_name" property="curName" jdbcType="VARCHAR" />
+        <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+        <result column="pro_year" property="proYear" jdbcType="VARCHAR" />
+        <result column="pro_month" property="proMonth" jdbcType="VARCHAR" />
+        <result column="pro_day" property="proDay" jdbcType="VARCHAR" />
+        <result column="mar_type" property="marType" jdbcType="INTEGER" />
+        <result column="Promise_name" property="promiseName" jdbcType="VARCHAR" />
+        <result column="year" property="year" jdbcType="VARCHAR" />
+        <result column="month" property="month" jdbcType="VARCHAR" />
+        <result column="day" property="day" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, audit_item_id, cur_name, card_no, pro_year, pro_month, pro_day, mar_type, Promise_name,
+        year, month, day
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_marriage
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_marriage
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yucheng.estm.entity.Marriage" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_marriage (audit_item_id, cur_name, card_no,
+        pro_year, pro_month, pro_day,
+        mar_type, Promise_name, year,
+        month, day)
+        values (#{auditItemId,jdbcType=INTEGER}, #{curName,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR},
+        #{proYear,jdbcType=VARCHAR}, #{proMonth,jdbcType=VARCHAR}, #{proDay,jdbcType=VARCHAR},
+        #{marType,jdbcType=INTEGER}, #{promiseName,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR},
+        #{month,jdbcType=VARCHAR}, #{day,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.yucheng.estm.entity.Marriage" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_marriage
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="auditItemId != null" >
+                audit_item_id,
+            </if>
+            <if test="curName != null" >
+                cur_name,
+            </if>
+            <if test="cardNo != null" >
+                card_no,
+            </if>
+            <if test="proYear != null" >
+                pro_year,
+            </if>
+            <if test="proMonth != null" >
+                pro_month,
+            </if>
+            <if test="proDay != null" >
+                pro_day,
+            </if>
+            <if test="marType != null" >
+                mar_type,
+            </if>
+            <if test="promiseName != null" >
+                Promise_name,
+            </if>
+            <if test="year != null" >
+                year,
+            </if>
+            <if test="month != null" >
+                month,
+            </if>
+            <if test="day != null" >
+                day,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="auditItemId != null" >
+                #{auditItemId,jdbcType=INTEGER},
+            </if>
+            <if test="curName != null" >
+                #{curName,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNo != null" >
+                #{cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="proYear != null" >
+                #{proYear,jdbcType=VARCHAR},
+            </if>
+            <if test="proMonth != null" >
+                #{proMonth,jdbcType=VARCHAR},
+            </if>
+            <if test="proDay != null" >
+                #{proDay,jdbcType=VARCHAR},
+            </if>
+            <if test="marType != null" >
+                #{marType,jdbcType=INTEGER},
+            </if>
+            <if test="promiseName != null" >
+                #{promiseName,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="month != null" >
+                #{month,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null" >
+                #{day,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.Marriage" >
+        update t_marriage
+        <set >
+            <if test="auditItemId != null" >
+                audit_item_id = #{auditItemId,jdbcType=INTEGER},
+            </if>
+            <if test="curName != null" >
+                cur_name = #{curName,jdbcType=VARCHAR},
+            </if>
+            <if test="cardNo != null" >
+                card_no = #{cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="proYear != null" >
+                pro_year = #{proYear,jdbcType=VARCHAR},
+            </if>
+            <if test="proMonth != null" >
+                pro_month = #{proMonth,jdbcType=VARCHAR},
+            </if>
+            <if test="proDay != null" >
+                pro_day = #{proDay,jdbcType=VARCHAR},
+            </if>
+            <if test="marType != null" >
+                mar_type = #{marType,jdbcType=INTEGER},
+            </if>
+            <if test="promiseName != null" >
+                Promise_name = #{promiseName,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                year = #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="month != null" >
+                month = #{month,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null" >
+                day = #{day,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.Marriage" >
+        update t_marriage
+        set audit_item_id = #{auditItemId,jdbcType=INTEGER},
+        cur_name = #{curName,jdbcType=VARCHAR},
+        card_no = #{cardNo,jdbcType=VARCHAR},
+        pro_year = #{proYear,jdbcType=VARCHAR},
+        pro_month = #{proMonth,jdbcType=VARCHAR},
+        pro_day = #{proDay,jdbcType=VARCHAR},
+        mar_type = #{marType,jdbcType=INTEGER},
+        Promise_name = #{promiseName,jdbcType=VARCHAR},
+        year = #{year,jdbcType=VARCHAR},
+        month = #{month,jdbcType=VARCHAR},
+        day = #{day,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

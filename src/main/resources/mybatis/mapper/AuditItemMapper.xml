@@ -13,26 +13,47 @@
     id, order_no, item_type, file_type, file_name, path
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_audit_item
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectListByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+  <select id="" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_audit_item
-    where order_no = #{orderNo}
+    where order_no = #{orderNo} and item_type= #{itemType}
   </select>
+
+  <select id="selectListByCondition" parameterType="com.yucheng.estm.entity.AuditItem" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_audit_item
+    <where>
+      1=1
+      <if test="orderNo != null">
+        and order_no = #{orderNo}
+      </if>
+      <if test="itemType != null">
+        and item_type = #{itemType}
+      </if>
+      <if test="state != null">
+        and file_type = #{fileType}
+      </if>
+    </where>
+  </select>
+
+
 
   <insert id="insert" parameterType="com.yucheng.estm.entity.AuditItem">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_audit_item (order_no, item_type, file_type, 
-      file_name, path)
-    values (#{orderNo,jdbcType=VARCHAR}, #{itemType,jdbcType=INTEGER}, #{fileType,jdbcType=INTEGER}, 
-      #{fileName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR})
+    insert into t_audit_item (order_no, item_type, file_type,
+    file_name, path)
+    values (#{orderNo,jdbcType=VARCHAR}, #{itemType,jdbcType=INTEGER}, #{fileType,jdbcType=INTEGER},
+    #{fileName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yucheng.estm.entity.AuditItem">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -74,6 +95,22 @@
       </if>
     </trim>
   </insert>
+  <insert id ="insertBatch" parameterType="java.util.List" >
+    <selectKey resultType ="java.lang.Integer" keyProperty= "id"
+               order= "AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey >
+    insert into t_audit_item (order_no, item_type, file_type,
+    file_name, path)
+    values
+    <foreach collection ="list" item="auditItem" index= "index" separator =",">
+      (
+      (#{auditItem.orderNo,jdbcType=VARCHAR}, #{auditItem.itemType,jdbcType=INTEGER}, #{auditItem.fileType,jdbcType=INTEGER},
+      #{auditItem.fileName,jdbcType=VARCHAR}, #{auditItem.path,jdbcType=VARCHAR})
+      )
+    </foreach >
+  </insert >
+
 
   <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.AuditItem">
     update t_audit_item

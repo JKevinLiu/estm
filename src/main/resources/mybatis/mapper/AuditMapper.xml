@@ -5,22 +5,34 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="bus_type" jdbcType="INTEGER" property="busType" />
-    <result column="out_name" jdbcType="VARCHAR" property="outName" />
-    <result column="out_phone" jdbcType="VARCHAR" property="outPhone" />
-    <result column="audit_user_id" jdbcType="INTEGER" property="auditUserId" />
+    <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
+    <association column="audit_user_id" property="auditUser" select="com.yucheng.estm.mapper.InnerUserMapper.selectByPrimaryKey"/>
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
     <result column="dir_path" jdbcType="VARCHAR" property="dirPath" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <resultMap id="QueryResultMap" type="com.yucheng.estm.entity.Audit">
+    <id column="a.id" jdbcType="INTEGER" property="id" />
+    <result column="a.order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="a.bus_type" jdbcType="INTEGER" property="busType" />
+    <association column="a.out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
+    <association column="a.audit_user_id" property="auditUser" select="com.yucheng.estm.mapper.InnerUserMapper.selectByPrimaryKey"/>
+    <result column="a.state" jdbcType="INTEGER" property="state" />
+    <result column="a.create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="a.audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="a.dir_path" jdbcType="VARCHAR" property="dirPath" />
+    <result column="a.remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
   <sql id="Base_Column_List">
-    id, order_no, bus_type, out_name, out_phone, audit_user_id, state, create_date, audit_date, 
+    id, order_no, bus_type, out_user_id, audit_user_id, state, create_date, audit_date,
     dir_path, remark
   </sql>
-
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_audit
     where id = #{id,jdbcType=INTEGER}
@@ -31,23 +43,25 @@
     from t_audit
     where order_no = #{orderNo,jdbcType=INTEGER}
   </select>
-  <select id="selectListByCondition" parameterType="com.yucheng.estm.entity.Audit" resultMap="BaseResultMap">
+
+  <select id="selectListByCondition" parameterType="com.yucheng.estm.entity.Audit" resultMap="QueryResultMap">
     select
-    <include refid="Base_Column_List" />
-    from t_audit
+    a.id, a.order_no, a.bus_type, a.out_user_id, a.audit_user_id, a.state, a.create_date, a.audit_date,
+    a.dir_path, a.remark, o.name, o.phone
+    from t_audit a left join t_out_user o on a.out_user_id = o.id
     <where>
       1=1
       <if test="orderNo != null">
-        and orderNo = #{orderNo}
+        and a.order_no = #{orderNo}
       </if>
       <if test="busType != null">
-        and busType = #{busType}
+        and a.bus_type = #{busType}
       </if>
-      <if test="outName != null">
-        and outName LIKE '%' #{outName} '%'
+      <if test="o.outName != null">
+        and o.name LIKE '%' #{outUser.name} '%'
       </if>
       <if test="outPhone != null">
-        and outName LIKE '%' #{outPhone} '%'
+        and o.phone LIKE '%' #{outUser.phone} '%'
       </if>
       <if test="state != null">
         and state = #{state}
@@ -55,18 +69,22 @@
     </where>
   </select>
 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_audit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
   <insert id="insert" parameterType="com.yucheng.estm.entity.Audit">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_audit (order_no, bus_type, out_name, 
-      out_phone, audit_user_id, state, 
-      create_date, audit_date, dir_path, 
-      remark)
-    values (#{orderNo,jdbcType=VARCHAR}, #{busType,jdbcType=INTEGER}, #{outName,jdbcType=VARCHAR}, 
-      #{outPhone,jdbcType=VARCHAR}, #{auditUserId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{auditDate,jdbcType=TIMESTAMP}, #{dirPath,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR})
+    insert into t_audit (order_no, bus_type, out_user_id,
+    audit_user_id, state, create_date,
+    audit_date, dir_path, remark
+    )
+    values (#{orderNo,jdbcType=VARCHAR}, #{busType,jdbcType=INTEGER}, #{outUserId,jdbcType=INTEGER},
+    #{auditUserId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+    #{auditDate,jdbcType=TIMESTAMP}, #{dirPath,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.yucheng.estm.entity.Audit">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -80,11 +98,8 @@
       <if test="busType != null">
         bus_type,
       </if>
-      <if test="outName != null">
-        out_name,
-      </if>
-      <if test="outPhone != null">
-        out_phone,
+      <if test="outUserId != null">
+        out_user_id,
       </if>
       <if test="auditUserId != null">
         audit_user_id,
@@ -112,11 +127,8 @@
       <if test="busType != null">
         #{busType,jdbcType=INTEGER},
       </if>
-      <if test="outName != null">
-        #{outName,jdbcType=VARCHAR},
-      </if>
-      <if test="outPhone != null">
-        #{outPhone,jdbcType=VARCHAR},
+      <if test="outUserId != null">
+        #{outUserId,jdbcType=INTEGER},
       </if>
       <if test="auditUserId != null">
         #{auditUserId,jdbcType=INTEGER},
@@ -138,7 +150,6 @@
       </if>
     </trim>
   </insert>
-
   <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.Audit">
     update t_audit
     <set>
@@ -148,11 +159,8 @@
       <if test="busType != null">
         bus_type = #{busType,jdbcType=INTEGER},
       </if>
-      <if test="outName != null">
-        out_name = #{outName,jdbcType=VARCHAR},
-      </if>
-      <if test="outPhone != null">
-        out_phone = #{outPhone,jdbcType=VARCHAR},
+      <if test="outUserId != null">
+        out_user_id = #{outUserId,jdbcType=INTEGER},
       </if>
       <if test="auditUserId != null">
         audit_user_id = #{auditUserId,jdbcType=INTEGER},
@@ -178,20 +186,15 @@
   <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.Audit">
     update t_audit
     set order_no = #{orderNo,jdbcType=VARCHAR},
-      bus_type = #{busType,jdbcType=INTEGER},
-      out_name = #{outName,jdbcType=VARCHAR},
-      out_phone = #{outPhone,jdbcType=VARCHAR},
-      audit_user_id = #{auditUserId,jdbcType=INTEGER},
-      state = #{state,jdbcType=INTEGER},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      audit_date = #{auditDate,jdbcType=TIMESTAMP},
-      dir_path = #{dirPath,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+    bus_type = #{busType,jdbcType=INTEGER},
+    out_user_id = #{outUserId,jdbcType=INTEGER},
+    audit_user_id = #{auditUserId,jdbcType=INTEGER},
+    state = #{state,jdbcType=INTEGER},
+    create_date = #{createDate,jdbcType=TIMESTAMP},
+    audit_date = #{auditDate,jdbcType=TIMESTAMP},
+    dir_path = #{dirPath,jdbcType=VARCHAR},
+    remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_audit
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
 </mapper>

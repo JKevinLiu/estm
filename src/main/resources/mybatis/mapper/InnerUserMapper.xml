@@ -13,11 +13,19 @@
     id, user_name, password, nick_name, create_date, role_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_inner_user
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="selectUserByUserName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_inner_user
+    where user_name = #{userName}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_inner_user
     where id = #{id,jdbcType=INTEGER}
@@ -26,10 +34,10 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_inner_user (user_name, password, nick_name, 
-      create_date, role_id)
-    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{roleId,jdbcType=INTEGER})
+    insert into t_inner_user (user_name, password, nick_name,
+    create_date, role_id)
+    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
+    #{createDate,jdbcType=TIMESTAMP}, #{roleId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.yucheng.estm.entity.InnerUser" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >

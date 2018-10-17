@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yucheng.estm.mapper.WechatSendMapper" >
+    <resultMap id="BaseResultMap" type="com.yucheng.estm.entity.WechatSend" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="audit_id" property="auditId" jdbcType="INTEGER" />
+        <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
+        <result column="cotent" property="cotent" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
+        <result column="template_id" property="templateId" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, audit_id, outuser_id, cotent, create_date, send_date, template_id
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_wx_send
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_wx_send
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yucheng.estm.entity.WechatSend" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_wx_send (audit_id, outuser_id, cotent,
+        create_date, send_date, template_id
+        )
+        values (#{auditId,jdbcType=INTEGER}, #{outuserId,jdbcType=INTEGER}, #{cotent,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP}, #{sendDate,jdbcType=TIMESTAMP}, #{templateId,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.yucheng.estm.entity.WechatSend" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_wx_send
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="auditId != null" >
+                audit_id,
+            </if>
+            <if test="outuserId != null" >
+                outuser_id,
+            </if>
+            <if test="cotent != null" >
+                cotent,
+            </if>
+            <if test="createDate != null" >
+                create_date,
+            </if>
+            <if test="sendDate != null" >
+                send_date,
+            </if>
+            <if test="templateId != null" >
+                template_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="auditId != null" >
+                #{auditId,jdbcType=INTEGER},
+            </if>
+            <if test="outuserId != null" >
+                #{outuserId,jdbcType=INTEGER},
+            </if>
+            <if test="cotent != null" >
+                #{cotent,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sendDate != null" >
+                #{sendDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="templateId != null" >
+                #{templateId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.WechatSend" >
+        update t_wx_send
+        <set >
+            <if test="auditId != null" >
+                audit_id = #{auditId,jdbcType=INTEGER},
+            </if>
+            <if test="outuserId != null" >
+                outuser_id = #{outuserId,jdbcType=INTEGER},
+            </if>
+            <if test="cotent != null" >
+                cotent = #{cotent,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sendDate != null" >
+                send_date = #{sendDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="templateId != null" >
+                template_id = #{templateId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.WechatSend" >
+        update t_wx_send
+        set audit_id = #{auditId,jdbcType=INTEGER},
+        outuser_id = #{outuserId,jdbcType=INTEGER},
+        cotent = #{cotent,jdbcType=VARCHAR},
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+        send_date = #{sendDate,jdbcType=TIMESTAMP},
+        template_id = #{templateId,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

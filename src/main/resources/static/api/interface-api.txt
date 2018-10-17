@@ -1,0 +1,82 @@
+wechat：
+   1.注册
+     wechat/register     post
+          入参：name, phone, openId
+          出参：code,message
+
+   2.生成审核单
+     wechat/create_audit        post
+          入参：openId, auditItemList(不动产申请书对象，婚姻证明对象，具结书对象，Image...)
+          出参：code,message
+
+admin：
+   1.登录
+      (1)login/dologin         post
+          入参：innerUserId, password
+          出参：code,message,Object
+      (2)login/loginOut        get
+          入参：
+          出参：code,message
+      (3)catalog/busi      目录树
+            入参：
+            出参：code,message,Object
+
+   2.审批单列表
+      audit/list          get
+          入参：审核状态（state）, 当前页数，一页多少条记录
+          出参：code,message,Object
+
+   3.校验是否可以审批
+      audit/check             get
+          入参：orderNo
+          出参：code,message,result
+
+   3.审核明细请求
+      (1) audit/detail/word/req_cert  get
+          入参：orderId
+          出参：code,message,uri
+      (2) audit/detail/word/marri  get
+          入参：orderId
+          出参：code,message,uri
+      (3) audit/detail/word/recog  get
+          入参：orderId
+          出参：code,message,uri
+
+
+      (4) audit/detail/master    get
+          入参：orderId
+          出参：code,message,List
+
+      (3)audit/commit  post
+          入参：orderId
+          出参：code,message
+
+   3.打印(未确定)
+      (1)print/req_cert     打印申请书
+          入参：orderId
+          出参：html文件
+      (2)print/marriage     打印婚姻承诺书
+          入参：orderId
+          出参：html文件
+      (3)print/recog    打印具结证明书
+          入参：orderId
+          出参：html文件
+   4.批量下载
+      (1) print/download_all  下载所有资料
+          入参：orderId
+          出参：xxx.zip
+   5.推送
+      无
+
+
+
+
+      https://www.cnblogs.com/qingxinblog/p/3404051.html
+
+
+      http://localhost:8080/doc/req_cert?orderId=201810091030502495
+      http://localhost:8080/print/req_cert?orderId=201810091030502495
+      http://localhost:8080/audit/list?curPage=1&pageSize=3
+      http://localhost:8080/audit/doAudit?orderNo=249520181009103050
+      http://localhost:8080/audit/detail?orderNo=249520181009103050
+      http://localhost:8080/busi_catalog/

@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("catalog")
 public class CatalogController {
 
-    @Autowired
-    private CatalogService catalogService;
-
     /**
-     * 目录树
+     * 目录树 (demo阶段不用动态生成)
      */
-    @RequestMapping(value = "/busi_catalog")
+    @RequestMapping(value = "/busi")
     public ResponseEntity<JsonResult> create(){
         JsonResult r = new JsonResult();
 

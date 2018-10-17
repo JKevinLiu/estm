@@ -4,20 +4,18 @@ import com.github.pagehelper.PageInfo;
 import com.yucheng.estm.constants.CommonContant;
 import com.yucheng.estm.constants.MessageContant;
 import com.yucheng.estm.dto.AuditDto;
-import com.yucheng.estm.dto.ItemDto;
+import com.yucheng.estm.dto.ImgAlais;
 import com.yucheng.estm.dto.JsonResult;
-import com.yucheng.estm.dto.manager.DataImage;
 import com.yucheng.estm.entity.Audit;
-import com.yucheng.estm.entity.AuditItem;
 import com.yucheng.estm.service.AuditService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/audit")
@@ -26,26 +24,6 @@ public class AuditController {
 
     @Autowired
     private AuditService auditService;
-
-    /**
-     * 生成审核单
-     */
-    @RequestMapping(value = "/create")
-    public ResponseEntity<JsonResult> create(String outUserId, Map<String, String> reqCertWord, Map<String, String> marriageWord,
-                                             Map<String, String> recogWord, List<DataImage> dataImageList){
-        JsonResult r = new JsonResult();
-
-        try {
-            Audit audit = auditService.createAuditOrder(Integer.parseInt(outUserId), reqCertWord, marriageWord, recogWord, dataImageList);
-
-            r.setResult(audit);
-            r.setStatus(MessageContant.STATUS_OK);
-        } catch (Exception e) {
-            r.setStatus(MessageContant.STATUS_FAIL);
-            r.setDesc(e.getMessage());
-        }
-        return ResponseEntity.ok(r);
-    }
 
     /**
      *审核单列表，分页，条件过滤
@@ -68,7 +46,7 @@ public class AuditController {
     /**
      *开始审核校验
      */
-    @RequestMapping(value = "/doAudit")
+    @RequestMapping(value = "/check")
     public ResponseEntity<JsonResult> doAudit(String orderNo){
         JsonResult r = new JsonResult();
         try {
@@ -94,13 +72,43 @@ public class AuditController {
     }
 
     /**
-     *审核单明细条目
+     * word审核单条目资源uri
      */
-    @RequestMapping(value = "/detail")
-    public ResponseEntity<JsonResult> auditDetail(String orderNo){
+    @RequestMapping(value = "/detail/word/{itemType}")
+    public ResponseEntity<JsonResult> auditWordDetail(String orderNo, @PathVariable("itemType") String itemTypeStr){
         JsonResult r = new JsonResult();
         try {
-            List<List<ItemDto>> aliasList = auditService.auditAliasInfo(orderNo);
+            int itemType;
+
+            if("req_cert".equalsIgnoreCase(itemTypeStr)){
+                itemType = CommonContant.IT_REQ_CERT;
+            }else if ("marri".equalsIgnoreCase(itemTypeStr)){
+                itemType = CommonContant.IT_MARRIAGE;
+            }else if ("recog".equalsIgnoreCase(itemTypeStr)){
+                itemType = CommonContant.IT_RECOG;
+            }else{
+                throw new Exception("未知类型的文件请求");
+            }
+
+            String uri = auditService.getWordItemResource(orderNo, itemType);
+
+            r.setResult(uri);
+            r.setStatus(MessageContant.STATUS_OK);
+        } catch (Exception e) {
+            r.setStatus(MessageContant.STATUS_FAIL);
+            r.setDesc(e.getMessage());
+        }
+        return ResponseEntity.ok(r);
+    }
+
+    /**
+     * 证明材料
+     */
+    @RequestMapping(value = "/detail/master")
+    public ResponseEntity<JsonResult> auditMasterDetail(String orderNo){
+        JsonResult r = new JsonResult();
+        try {
+            List<ImgAlais> aliasList = auditService.getImgAliasList(orderNo);
             r.setResult(aliasList);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
@@ -114,10 +122,10 @@ public class AuditController {
      *提交审核
      */
     @RequestMapping(value = "/commit")
-    public ResponseEntity<JsonResult> commit(int auditId, List<AuditItem> auditItemList, boolean isSuccess, String sendDate,String reson){
+    public ResponseEntity<JsonResult> commit(int auditId, boolean isSuccess, String sendDate,String reson){
         JsonResult r = new JsonResult();
         try {
-            auditService.commitAudit(auditId, auditItemList, isSuccess, sendDate, reson);
+            auditService.commitAudit(auditId, isSuccess, sendDate, reson);
             r.setStatus(MessageContant.STATUS_OK);
             r.setDesc("提交成功！");
         } catch (Exception e) {

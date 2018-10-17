@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yucheng.estm.mapper.RecognizanceMapper" >
+    <resultMap id="BaseResultMap" type="com.yucheng.estm.entity.Recognizance" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="audit_item_id" property="auditItemId" jdbcType="INTEGER" />
+        <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+        <result column="town" property="town" jdbcType="VARCHAR" />
+        <result column="road" property="road" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="VARCHAR" />
+        <result column="Building" property="building" jdbcType="VARCHAR" />
+        <result column="unit" property="unit" jdbcType="VARCHAR" />
+        <result column="floor" property="floor" jdbcType="VARCHAR" />
+        <result column="room" property="room" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="year" property="year" jdbcType="VARCHAR" />
+        <result column="month" property="month" jdbcType="VARCHAR" />
+        <result column="day" property="day" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, audit_item_id, card_no, town, road, num, Building, unit, floor, room, name, year,
+        month, day
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_recognizance
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_recognizance
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yucheng.estm.entity.Recognizance" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_recognizance (audit_item_id, card_no, town,
+        road, num, Building,
+        unit, floor, room,
+        name, year, month,
+        day)
+        values (#{auditItemId,jdbcType=INTEGER}, #{cardNo,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR},
+        #{road,jdbcType=VARCHAR}, #{num,jdbcType=VARCHAR}, #{building,jdbcType=VARCHAR},
+        #{unit,jdbcType=VARCHAR}, #{floor,jdbcType=VARCHAR}, #{room,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}, #{month,jdbcType=VARCHAR},
+        #{day,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.yucheng.estm.entity.Recognizance" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_recognizance
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="auditItemId != null" >
+                audit_item_id,
+            </if>
+            <if test="cardNo != null" >
+                card_no,
+            </if>
+            <if test="town != null" >
+                town,
+            </if>
+            <if test="road != null" >
+                road,
+            </if>
+            <if test="num != null" >
+                num,
+            </if>
+            <if test="building != null" >
+                Building,
+            </if>
+            <if test="unit != null" >
+                unit,
+            </if>
+            <if test="floor != null" >
+                floor,
+            </if>
+            <if test="room != null" >
+                room,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="year != null" >
+                year,
+            </if>
+            <if test="month != null" >
+                month,
+            </if>
+            <if test="day != null" >
+                day,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="auditItemId != null" >
+                #{auditItemId,jdbcType=INTEGER},
+            </if>
+            <if test="cardNo != null" >
+                #{cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="town != null" >
+                #{town,jdbcType=VARCHAR},
+            </if>
+            <if test="road != null" >
+                #{road,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null" >
+                #{num,jdbcType=VARCHAR},
+            </if>
+            <if test="building != null" >
+                #{building,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null" >
+                #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="floor != null" >
+                #{floor,jdbcType=VARCHAR},
+            </if>
+            <if test="room != null" >
+                #{room,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="month != null" >
+                #{month,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null" >
+                #{day,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.Recognizance" >
+        update t_recognizance
+        <set >
+            <if test="auditItemId != null" >
+                audit_item_id = #{auditItemId,jdbcType=INTEGER},
+            </if>
+            <if test="cardNo != null" >
+                card_no = #{cardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="town != null" >
+                town = #{town,jdbcType=VARCHAR},
+            </if>
+            <if test="road != null" >
+                road = #{road,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null" >
+                num = #{num,jdbcType=VARCHAR},
+            </if>
+            <if test="building != null" >
+                Building = #{building,jdbcType=VARCHAR},
+            </if>
+            <if test="unit != null" >
+                unit = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="floor != null" >
+                floor = #{floor,jdbcType=VARCHAR},
+            </if>
+            <if test="room != null" >
+                room = #{room,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="year != null" >
+                year = #{year,jdbcType=VARCHAR},
+            </if>
+            <if test="month != null" >
+                month = #{month,jdbcType=VARCHAR},
+            </if>
+            <if test="day != null" >
+                day = #{day,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.Recognizance" >
+        update t_recognizance
+        set audit_item_id = #{auditItemId,jdbcType=INTEGER},
+        card_no = #{cardNo,jdbcType=VARCHAR},
+        town = #{town,jdbcType=VARCHAR},
+        road = #{road,jdbcType=VARCHAR},
+        num = #{num,jdbcType=VARCHAR},
+        Building = #{building,jdbcType=VARCHAR},
+        unit = #{unit,jdbcType=VARCHAR},
+        floor = #{floor,jdbcType=VARCHAR},
+        room = #{room,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        year = #{year,jdbcType=VARCHAR},
+        month = #{month,jdbcType=VARCHAR},
+        day = #{day,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

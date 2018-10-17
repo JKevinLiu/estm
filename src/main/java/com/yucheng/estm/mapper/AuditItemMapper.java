@@ -13,11 +13,13 @@ public interface AuditItemMapper {
 
     int insertSelective(AuditItem record);
 
+    void insertBatch(List<AuditItem> auditItemList);
+
     AuditItem selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(AuditItem record);
 
     int updateByPrimaryKey(AuditItem record);
 
-    List<AuditItem> selectListByOrderNo(String orderNo);
+    List<AuditItem> selectListByCondition(AuditItem item);
 }

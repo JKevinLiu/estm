@@ -56,10 +56,9 @@ create table t_audit
    id                   int not null,
    order_no             varchar(18),
    bus_type             int,
-   out_name             varchar(40),
-   out_phone            varchar(30),
+   out_user_id          int,
    audit_user_id        int,
-   state                int,
+   state                 int,
    create_date          datetime,
    audit_date           datetime,
    dir_path             varchar(100),
@@ -94,7 +93,7 @@ create table t_req_cert
 (
    id                   int not null,
    audit_item_id        int,
-   app_type             int,
+   app_type             varchar(200),
    ob_name1             varchar(40),
    card_type1           int,
    card_no1             varchar(40),
@@ -118,31 +117,7 @@ create table t_req_cert
    applicant2           varchar(40),
    agent2               varchar(40),
    primary key (id)
-);
-
-
-drop table if exists t_recognizance;
-
-/*==============================================================*/
-/* Table: t_recognizance                                        */
-/*==============================================================*/
-create table t_recognizance
-(
-   id                   int,
-   audit_item_id        int,
-   card_no              varchar(40),
-   town                 varchar(40),
-   road                 varchar(100),
-   num                  varchar(40),
-   Building             varchar(10),
-   unit                 varchar(10),
-   floor                varchar(10),
-   room                 varchar(10),
-   name                 varchar(40),
-   year                 varchar(10),
-   month                varchar(10),
-   day                  varchar(10)
-);
+)auto_increment=1001;
 
 
 drop table if exists t_marriage;
@@ -163,8 +138,35 @@ create table t_marriage
    Promise_name         varchar(40),
    year                 varchar(10),
    month                varchar(10),
-   day                  varchar(10)
-);
+   day                  varchar(10),
+   primary key (id)
+)auto_increment=1001;
+
+
+drop table if exists t_recognizance;
+
+/*==============================================================*/
+/* Table: t_recognizance                                        */
+/*==============================================================*/
+create table t_recognizance
+(
+   id                   int,
+   audit_item_id       int,
+   card_no              varchar(40),
+   town                 varchar(40),
+   road                 varchar(100),
+   num                  varchar(40),
+   Building             varchar(10),
+   unit                 varchar(10),
+   floor                varchar(10),
+   room                 varchar(10),
+   name                 varchar(40),
+   year                 varchar(10),
+   month                varchar(10),
+   day                  varchar(10),
+   primary key (id)
+)auto_increment=1001;
+
 
 
 drop table if exists t_wx_send;
@@ -175,13 +177,14 @@ drop table if exists t_wx_send;
 create table t_wx_send
 (
    id                   int,
-   outuser_id           int,
    audit_id             int,
+   out_user_id           int,
    cotent               varchar(255),
-   send_date            datetime,
    create_date          datetime,
-   template_id          varchar(255)
-);
+   send_date            datetime,
+   template_id          varchar(100),
+   primary key (id)
+)auto_increment=1001;
 
 drop table if exists t_wx_send_his;
 
@@ -191,12 +194,14 @@ drop table if exists t_wx_send_his;
 create table t_wx_send_his
 (
    id                   int,
-   outuser_id           int,
    audit_id             int,
+   outuser_id           int,
    cotent               varchar(255),
-   send_date            datetime,
    create_date          datetime,
+   send_date            datetime,
+   template_id          varchar(100),
    finish_date          datetime,
    state                int,
-   send_log             varchar(1000)
-);
+   send_log             varchar(1000),
+   primary key (id)
+)auto_increment=1001;

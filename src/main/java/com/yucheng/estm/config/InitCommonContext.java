@@ -15,36 +15,31 @@ public class InitCommonContext implements InitializingBean {
 
     private static Catalog root;
     private static Map<Integer, String> catalogNameMap = new HashMap<>();
-    private static Map<Integer, String> busTypeMap = new HashMap<>();
 
     @Autowired
     private CatalogService catalogService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        List<Catalog> catalogList = catalogService.getCatalogListByParentId(-1);
+       /* List<Catalog> catalogList = catalogService.getCatalogListByParentId(-1);
         if(catalogList != null && catalogList.size() > 0){
             root = catalogList.get(0);
         }else{
             root = new Catalog();
         }
-        initCatalogMap(root, "");
+        initCatalogMap(root, "");*/
 
-        System.out.println();
+        catalogNameMap.put(1, "房屋>>买卖>>个人");
 
     }
 
-    public void initCatalogMap(Catalog cat, String baseName){
+    private void initCatalogMap(Catalog cat, String baseName){
         if(cat.getChildList() == null){
             return;
         }
 
         for(Catalog child : cat.getChildList()){
             int id = child.getId();
-
-            if(child.getBusCode() != null && !"".equalsIgnoreCase(child.getBusCode())){
-                busTypeMap.put(id,child.getBusCode());
-            }
 
             String newBaseName = "";
             if("".equalsIgnoreCase(baseName)){
@@ -68,7 +63,4 @@ public class InitCommonContext implements InitializingBean {
         return catalogNameMap;
     }
 
-    public static Map<Integer, String> getBusTypeMap() {
-        return busTypeMap;
-    }
 }

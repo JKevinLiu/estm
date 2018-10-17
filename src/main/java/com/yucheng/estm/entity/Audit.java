@@ -9,11 +9,9 @@ public class Audit {
 
     private Integer busType;
 
-    private String outName;
+    private OutUser outUser;
 
-    private String outPhone;
-
-    private Integer auditUserId;
+    private InnerUser auditUser;
 
     private Integer state;
 
@@ -49,28 +47,20 @@ public class Audit {
         this.busType = busType;
     }
 
-    public String getOutName() {
-        return outName;
+    public OutUser getOutUser() {
+        return outUser;
     }
 
-    public void setOutName(String outName) {
-        this.outName = outName == null ? null : outName.trim();
+    public void setOutUser(OutUser outUser) {
+        this.outUser = outUser;
     }
 
-    public String getOutPhone() {
-        return outPhone;
+    public InnerUser getAuditUser() {
+        return auditUser;
     }
 
-    public void setOutPhone(String outPhone) {
-        this.outPhone = outPhone == null ? null : outPhone.trim();
-    }
-
-    public Integer getAuditUserId() {
-        return auditUserId;
-    }
-
-    public void setAuditUserId(Integer auditUserId) {
-        this.auditUserId = auditUserId;
+    public void setAuditUser(InnerUser auditUser) {
+        this.auditUser = auditUser;
     }
 
     public Integer getState() {

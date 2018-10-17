@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yucheng.estm.mapper.ReqCertMapper" >
+    <resultMap id="BaseResultMap" type="com.yucheng.estm.entity.ReqCert" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="audit_item_id" property="auditItemId" jdbcType="INTEGER" />
+        <result column="app_type" property="appType" jdbcType="VARCHAR" />
+        <result column="ob_name1" property="obName1" jdbcType="VARCHAR" />
+        <result column="card_type1" property="cardType1" jdbcType="INTEGER" />
+        <result column="card_no1" property="cardNo1" jdbcType="VARCHAR" />
+        <result column="adress1" property="adress1" jdbcType="VARCHAR" />
+        <result column="postal_code1" property="postalCode1" jdbcType="VARCHAR" />
+        <result column="ob_name2" property="obName2" jdbcType="VARCHAR" />
+        <result column="card_type2" property="cardType2" jdbcType="INTEGER" />
+        <result column="card_no2" property="cardNo2" jdbcType="VARCHAR" />
+        <result column="adress2" property="adress2" jdbcType="VARCHAR" />
+        <result column="postal_code2" property="postalCode2" jdbcType="VARCHAR" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="est_type" property="estType" jdbcType="VARCHAR" />
+        <result column="acreage" property="acreage" jdbcType="VARCHAR" />
+        <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+        <result column="certificate_no" property="certificateNo" jdbcType="VARCHAR" />
+        <result column="app_form" property="appForm" jdbcType="INTEGER" />
+        <result column="app_cert" property="appCert" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="applicant1" property="applicant1" jdbcType="VARCHAR" />
+        <result column="agent1" property="agent1" jdbcType="VARCHAR" />
+        <result column="applicant2" property="applicant2" jdbcType="VARCHAR" />
+        <result column="agent2" property="agent2" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, audit_item_id, app_type, ob_name1, card_type1, card_no1, adress1, postal_code1,
+        ob_name2, card_type2, card_no2, adress2, postal_code2, location, est_type, acreage,
+        purpose, certificate_no, app_form, app_cert, remark, applicant1, agent1, applicant2,
+        agent2
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from t_req_cert
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from t_req_cert
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yucheng.estm.entity.ReqCert" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_req_cert (audit_item_id, app_type, ob_name1,
+        card_type1, card_no1, adress1,
+        postal_code1, ob_name2, card_type2,
+        card_no2, adress2, postal_code2,
+        location, est_type, acreage,
+        purpose, certificate_no, app_form,
+        app_cert, remark, applicant1,
+        agent1, applicant2, agent2
+        )
+        values (#{auditItemId,jdbcType=INTEGER}, #{appType,jdbcType=VARCHAR}, #{obName1,jdbcType=VARCHAR},
+        #{cardType1,jdbcType=INTEGER}, #{cardNo1,jdbcType=VARCHAR}, #{adress1,jdbcType=VARCHAR},
+        #{postalCode1,jdbcType=VARCHAR}, #{obName2,jdbcType=VARCHAR}, #{cardType2,jdbcType=INTEGER},
+        #{cardNo2,jdbcType=VARCHAR}, #{adress2,jdbcType=VARCHAR}, #{postalCode2,jdbcType=VARCHAR},
+        #{location,jdbcType=VARCHAR}, #{estType,jdbcType=VARCHAR}, #{acreage,jdbcType=VARCHAR},
+        #{purpose,jdbcType=VARCHAR}, #{certificateNo,jdbcType=VARCHAR}, #{appForm,jdbcType=INTEGER},
+        #{appCert,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{applicant1,jdbcType=VARCHAR},
+        #{agent1,jdbcType=VARCHAR}, #{applicant2,jdbcType=VARCHAR}, #{agent2,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.yucheng.estm.entity.ReqCert" >
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_req_cert
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="auditItemId != null" >
+                audit_item_id,
+            </if>
+            <if test="appType != null" >
+                app_type,
+            </if>
+            <if test="obName1 != null" >
+                ob_name1,
+            </if>
+            <if test="cardType1 != null" >
+                card_type1,
+            </if>
+            <if test="cardNo1 != null" >
+                card_no1,
+            </if>
+            <if test="adress1 != null" >
+                adress1,
+            </if>
+            <if test="postalCode1 != null" >
+                postal_code1,
+            </if>
+            <if test="obName2 != null" >
+                ob_name2,
+            </if>
+            <if test="cardType2 != null" >
+                card_type2,
+            </if>
+            <if test="cardNo2 != null" >
+                card_no2,
+            </if>
+            <if test="adress2 != null" >
+                adress2,
+            </if>
+            <if test="postalCode2 != null" >
+                postal_code2,
+            </if>
+            <if test="location != null" >
+                location,
+            </if>
+            <if test="estType != null" >
+                est_type,
+            </if>
+            <if test="acreage != null" >
+                acreage,
+            </if>
+            <if test="purpose != null" >
+                purpose,
+            </if>
+            <if test="certificateNo != null" >
+                certificate_no,
+            </if>
+            <if test="appForm != null" >
+                app_form,
+            </if>
+            <if test="appCert != null" >
+                app_cert,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="applicant1 != null" >
+                applicant1,
+            </if>
+            <if test="agent1 != null" >
+                agent1,
+            </if>
+            <if test="applicant2 != null" >
+                applicant2,
+            </if>
+            <if test="agent2 != null" >
+                agent2,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="auditItemId != null" >
+                #{auditItemId,jdbcType=INTEGER},
+            </if>
+            <if test="appType != null" >
+                #{appType,jdbcType=VARCHAR},
+            </if>
+            <if test="obName1 != null" >
+                #{obName1,jdbcType=VARCHAR},
+            </if>
+            <if test="cardType1 != null" >
+                #{cardType1,jdbcType=INTEGER},
+            </if>
+            <if test="cardNo1 != null" >
+                #{cardNo1,jdbcType=VARCHAR},
+            </if>
+            <if test="adress1 != null" >
+                #{adress1,jdbcType=VARCHAR},
+            </if>
+            <if test="postalCode1 != null" >
+                #{postalCode1,jdbcType=VARCHAR},
+            </if>
+            <if test="obName2 != null" >
+                #{obName2,jdbcType=VARCHAR},
+            </if>
+            <if test="cardType2 != null" >
+                #{cardType2,jdbcType=INTEGER},
+            </if>
+            <if test="cardNo2 != null" >
+                #{cardNo2,jdbcType=VARCHAR},
+            </if>
+            <if test="adress2 != null" >
+                #{adress2,jdbcType=VARCHAR},
+            </if>
+            <if test="postalCode2 != null" >
+                #{postalCode2,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null" >
+                #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="estType != null" >
+                #{estType,jdbcType=VARCHAR},
+            </if>
+            <if test="acreage != null" >
+                #{acreage,jdbcType=VARCHAR},
+            </if>
+            <if test="purpose != null" >
+                #{purpose,jdbcType=VARCHAR},
+            </if>
+            <if test="certificateNo != null" >
+                #{certificateNo,jdbcType=VARCHAR},
+            </if>
+            <if test="appForm != null" >
+                #{appForm,jdbcType=INTEGER},
+            </if>
+            <if test="appCert != null" >
+                #{appCert,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="applicant1 != null" >
+                #{applicant1,jdbcType=VARCHAR},
+            </if>
+            <if test="agent1 != null" >
+                #{agent1,jdbcType=VARCHAR},
+            </if>
+            <if test="applicant2 != null" >
+                #{applicant2,jdbcType=VARCHAR},
+            </if>
+            <if test="agent2 != null" >
+                #{agent2,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yucheng.estm.entity.ReqCert" >
+        update t_req_cert
+        <set >
+            <if test="auditItemId != null" >
+                audit_item_id = #{auditItemId,jdbcType=INTEGER},
+            </if>
+            <if test="appType != null" >
+                app_type = #{appType,jdbcType=VARCHAR},
+            </if>
+            <if test="obName1 != null" >
+                ob_name1 = #{obName1,jdbcType=VARCHAR},
+            </if>
+            <if test="cardType1 != null" >
+                card_type1 = #{cardType1,jdbcType=INTEGER},
+            </if>
+            <if test="cardNo1 != null" >
+                card_no1 = #{cardNo1,jdbcType=VARCHAR},
+            </if>
+            <if test="adress1 != null" >
+                adress1 = #{adress1,jdbcType=VARCHAR},
+            </if>
+            <if test="postalCode1 != null" >
+                postal_code1 = #{postalCode1,jdbcType=VARCHAR},
+            </if>
+            <if test="obName2 != null" >
+                ob_name2 = #{obName2,jdbcType=VARCHAR},
+            </if>
+            <if test="cardType2 != null" >
+                card_type2 = #{cardType2,jdbcType=INTEGER},
+            </if>
+            <if test="cardNo2 != null" >
+                card_no2 = #{cardNo2,jdbcType=VARCHAR},
+            </if>
+            <if test="adress2 != null" >
+                adress2 = #{adress2,jdbcType=VARCHAR},
+            </if>
+            <if test="postalCode2 != null" >
+                postal_code2 = #{postalCode2,jdbcType=VARCHAR},
+            </if>
+            <if test="location != null" >
+                location = #{location,jdbcType=VARCHAR},
+            </if>
+            <if test="estType != null" >
+                est_type = #{estType,jdbcType=VARCHAR},
+            </if>
+            <if test="acreage != null" >
+                acreage = #{acreage,jdbcType=VARCHAR},
+            </if>
+            <if test="purpose != null" >
+                purpose = #{purpose,jdbcType=VARCHAR},
+            </if>
+            <if test="certificateNo != null" >
+                certificate_no = #{certificateNo,jdbcType=VARCHAR},
+            </if>
+            <if test="appForm != null" >
+                app_form = #{appForm,jdbcType=INTEGER},
+            </if>
+            <if test="appCert != null" >
+                app_cert = #{appCert,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="applicant1 != null" >
+                applicant1 = #{applicant1,jdbcType=VARCHAR},
+            </if>
+            <if test="agent1 != null" >
+                agent1 = #{agent1,jdbcType=VARCHAR},
+            </if>
+            <if test="applicant2 != null" >
+                applicant2 = #{applicant2,jdbcType=VARCHAR},
+            </if>
+            <if test="agent2 != null" >
+                agent2 = #{agent2,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.ReqCert" >
+        update t_req_cert
+        set audit_item_id = #{auditItemId,jdbcType=INTEGER},
+        app_type = #{appType,jdbcType=VARCHAR},
+        ob_name1 = #{obName1,jdbcType=VARCHAR},
+        card_type1 = #{cardType1,jdbcType=INTEGER},
+        card_no1 = #{cardNo1,jdbcType=VARCHAR},
+        adress1 = #{adress1,jdbcType=VARCHAR},
+        postal_code1 = #{postalCode1,jdbcType=VARCHAR},
+        ob_name2 = #{obName2,jdbcType=VARCHAR},
+        card_type2 = #{cardType2,jdbcType=INTEGER},
+        card_no2 = #{cardNo2,jdbcType=VARCHAR},
+        adress2 = #{adress2,jdbcType=VARCHAR},
+        postal_code2 = #{postalCode2,jdbcType=VARCHAR},
+        location = #{location,jdbcType=VARCHAR},
+        est_type = #{estType,jdbcType=VARCHAR},
+        acreage = #{acreage,jdbcType=VARCHAR},
+        purpose = #{purpose,jdbcType=VARCHAR},
+        certificate_no = #{certificateNo,jdbcType=VARCHAR},
+        app_form = #{appForm,jdbcType=INTEGER},
+        app_cert = #{appCert,jdbcType=INTEGER},
+        remark = #{remark,jdbcType=VARCHAR},
+        applicant1 = #{applicant1,jdbcType=VARCHAR},
+        agent1 = #{agent1,jdbcType=VARCHAR},
+        applicant2 = #{applicant2,jdbcType=VARCHAR},
+        agent2 = #{agent2,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

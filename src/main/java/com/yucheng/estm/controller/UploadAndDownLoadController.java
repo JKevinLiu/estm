@@ -21,7 +21,7 @@ public class UploadAndDownLoadController {
      */
     @RequestMapping(value = "print/{req_cert}")
     public void printDoc(HttpServletResponse response, String orderId){
-        String htmlPath ="";
+        /*String htmlPath ="";
         try (FileInputStream in = new FileInputStream(htmlPath);
              BufferedInputStream bufferedInputStream = new BufferedInputStream(in);
              OutputStream outputStream = response.getOutputStream();
@@ -32,7 +32,7 @@ public class UploadAndDownLoadController {
             outputStream.flush();
         } catch (IOException e) {
             log.error(e.getMessage(),e);
-        }
+        }*/
     }
 
     /**
@@ -40,7 +40,7 @@ public class UploadAndDownLoadController {
      */
     @RequestMapping(value = "print/download_all")
     public void downloadAll(HttpServletResponse response, String orderId){
-        String basePath ="";
+        String basePath = "audit"+ File.separator + orderId + File.separator;
         //3.压缩文件夹并返回
         try (OutputStream out = response.getOutputStream()){
             response.setContentType("application/zip");

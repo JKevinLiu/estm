@@ -214,6 +214,10 @@ public class FileUtil {
     private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) throws Exception{
         byte[] buf = new byte[BUFFER_SIZE];
         if(sourceFile.isFile()){
+            //不打包生成html文件
+            if(sourceFile.getName().endsWith(".html")){
+                return;
+            }
             // 向zip输出流中添加一个zip实体，构造器中name为zip实体的文件的名字
             zos.putNextEntry(new ZipEntry(name));
             // copy文件到zip输出流中
