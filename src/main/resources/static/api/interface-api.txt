@@ -1,82 +1,298 @@
 wechat：
-   1.注册
+   1.注册（接入未实现）
      wechat/register     post
-          入参：name, phone, openId
-          出参：code,message
 
-   2.生成审核单
+          入参：name  注册用户姓名
+                   phone 注册用户手机号
+                   openId  id
+                   signature 接入
+                   timestamp 接入
+                   nonce   接入
+                   echostr 接入
+
+          出参：desc 返回描述
+                   status 调用结果（SUCEESS:成功，FAIL：失败）
+                   result：outuser对象信息
+
+          示例：http://localhost:8080/wechat/register
+
+                   application/json
+
+                   {
+                     'name':'张三',
+                     'phone':'182XXXXXXXX',
+                     'openId':'1234567890',
+                     'signature':'1234567890',
+                     'timestamp':'1234567890',
+                     'nonce':'1234567890',
+                     'echostr':'1234567890'
+                   }
+
+                  {
+                     "desc":"注册成功！",
+                     "result":{
+                        "createDate":1539830985049,
+                        "id":1015,
+                        "name":"张三",
+                        "openId":"1234567890",
+                        "phone":"182XXXXXXXX"
+                     },
+                     "status":"SUCCESS"
+                  }
+
+
+   2.生成审核单（需要讨论）
      wechat/create_audit        post
-          入参：openId, auditItemList(不动产申请书对象，婚姻证明对象，具结书对象，Image...)
-          出参：code,message
 
-admin：
-   1.登录
-      (1)login/dologin         post
-          入参：innerUserId, password
-          出参：code,message,Object
-      (2)login/loginOut        get
-          入参：
-          出参：code,message
-      (3)catalog/busi      目录树
-            入参：
-            出参：code,message,Object
+          入参：outUserId  外部用户ID
+                   openId          外部用户openId
+                   files 图片文件
+                   reqCert 不动产申请书
+                   marriage 婚姻状况承诺书
+                   recognizance 具结保证书
 
-   2.审批单列表
+          出参：desc 返回描述
+                   status 调用结果（SUCEESS:成功，FAIL：失败）
+
+          示例：http://localhost:8080/wechat/create_audit
+
+
+   3.登录后台
+     login/dologin     post
+
+          入参：username  登录名
+               password 登录密码
+
+          出参：desc 返回描述
+                   status 调用结果（SUCEESS:成功，FAIL：失败）
+                   result：inner_user对象信息
+
+          示例：http://localhost:8080/login/dologin
+               application/json
+
+                {'username':'admin','password':'123456'}
+
+                    {
+                        "desc":"登录成功",
+                        "result":{
+                            "createDate":1539832234000,
+                            "id":1001,
+                            "nickName":"管理员",
+                            "password":"123456",
+                            "userName":"admin"
+                        },
+                        "status":"SUCCESS"
+                    }
+
+
+   4.登出
+     login/loginOut   get
+          入参：无
+
+          出参：status 调用结果（SUCEESS:成功，FAIL：失败）
+
+
+        http://localhost:8080/login/logout
+
+        {
+            "status":"SUCCESS"
+        }
+
+
+   5.导航树形结构 (demo阶段无需调用)
+     catalog/busi
+
+
+   6.审核单列表
       audit/list          get
-          入参：审核状态（state）, 当前页数，一页多少条记录
-          出参：code,message,Object
+          入参：curPage : 当前是第几页
+                pageSize : 一页多少条记录
+                orderNo : 审批单号
+                busType : 业务类型 （demo阶段固定传1）
+                outUser.name : 模糊查询--姓名
+                outUser.phone ： 模糊查询--电话
+                state : 审核状态（1:待审核; 2:审核中; 3:审核通过; 4:审核不通过)
 
-   3.校验是否可以审批
+          出参：desc 返回描述
+                   status 调用结果（SUCEESS:成功，FAIL：失败）
+                   result：分页的审核单对象列表
+
+             示例：
+             http://localhost:8080/audit/list?curPage=1&pageSize=3&orderNo=&busType=1&outUser.phone=182&state=1
+
+                {
+                    "result":{
+                        "endRow":2,
+                        "firstPage":1,
+                        "hasNextPage":false,
+                        "hasPreviousPage":false,
+                        "isFirstPage":true,
+                        "isLastPage":true,
+                        "lastPage":1,
+                        "list":[
+                            {
+                                "busType":"房屋>>买卖>>个人",
+                                "createDate":"2018-10-18 14:20:23",
+                                "orderNo":"249520181017142030",
+                                "outPhone":"18285192495",
+                                "outUserName":"张三",
+                                "state":"待审核"
+                            },
+                            {
+                                "busType":"房屋>>买卖>>个人",
+                                "createDate":"2018-10-18 14:20:23",
+                                "orderNo":"249520181018142030",
+                                "outPhone":"18285192496",
+                                "outUserName":"李四",
+                                "state":"待审核"
+                            },
+                            {
+                                "busType":"房屋>>买卖>>个人",
+                                "createDate":"2018-10-18 14:20:23",
+                                "orderNo":"249520181019142030",
+                                "outPhone":"18285192497",
+                                "outUserName":"王五",
+                                "state":"待审核"
+                            }
+                        ],
+                        "navigatePages":8,
+                        "navigatepageNums":[1],
+                        "nextPage":0,
+                        "pageNum":1,
+                        "pageSize":3,
+                        "pages":1,
+                        "prePage":0,
+                        "size":3,
+                        "startRow":0,
+                        "total":3
+                    },
+                    "status":"SUCCESS"
+                }
+
+
+   7.校验是否可以审核
       audit/check             get
-          入参：orderNo
-          出参：code,message,result
 
-   3.审核明细请求
-      (1) audit/detail/word/req_cert  get
-          入参：orderId
-          出参：code,message,uri
-      (2) audit/detail/word/marri  get
-          入参：orderId
-          出参：code,message,uri
-      (3) audit/detail/word/recog  get
-          入参：orderId
-          出参：code,message,uri
+          入参：orderNo : 审批单号
+
+             出参：desc 返回描述
+                    status 调用结果（SUCEESS:成功，FAIL：失败）
+                    result：是否可以开始审核
+             示例：
+                 http://localhost:8080/audit/check?orderNo=249520181017142030
+                 {
+                    "desc":"审核单可以审核",
+                    "result":true,
+                    "status":"SUCCESS"
+                 }
 
 
-      (4) audit/detail/master    get
-          入参：orderId
-          出参：code,message,List
+   8.审核明细-不动产申请书
+       audit/detail/word/req_cert  get
 
-      (3)audit/commit  post
-          入参：orderId
-          出参：code,message
+         入参：orderNo : 审批单号
 
-   3.打印(未确定)
-      (1)print/req_cert     打印申请书
-          入参：orderId
-          出参：html文件
-      (2)print/marriage     打印婚姻承诺书
-          入参：orderId
-          出参：html文件
-      (3)print/recog    打印具结证明书
-          入参：orderId
-          出参：html文件
-   4.批量下载
+         出参：status 调用结果（SUCEESS:成功，FAIL：失败）
+               result：资源uri地址
+         示例：
+             http://localhost:8080/audit/detail/word/req_cert?orderNo=249520181017142030
+             {
+               "result":"audit/249520181017142030/reqcert.doc",
+               "status":"SUCCESS"
+             }
+
+    9.审核明细-婚姻状况承诺书
+           audit/detail/word/marri  get
+
+             入参：orderNo : 审批单号
+
+             出参：status 调用结果（SUCEESS:成功，FAIL：失败）
+                   result：资源uri地址
+             示例：
+                 http://localhost:8080/audit/detail/word/marriage?orderNo=249520181017142030
+                 {
+                   "result":"audit/249520181017142030/marriage.doc",
+                   "status":"SUCCESS"
+                 }
+
+    10.审核明细-具结保证书
+           audit/detail/word/recog  get
+
+             入参：orderNo : 审批单号
+
+             出参：status 调用结果（SUCEESS:成功，FAIL：失败）
+                   result：资源uri地址
+             示例：
+                 http://localhost:8080/audit/detail/word/recog?orderNo=249520181017142030
+                 {
+                   "result":"audit/249520181017142030/recog.doc",
+                   "status":"SUCCESS"
+                 }
+
+    11.审核明细-证明材料
+               audit/detail/master  get
+
+                 入参：orderNo : 审批单号
+
+                 出参：status 调用结果（SUCEESS:成功，FAIL：失败）
+                       result：证明材料分类及图片uri
+                 示例：
+                     http://localhost:8080/audit/detail/master?orderNo=249520181017142030
+
+                {
+                   "result":[
+                      {
+                         "imgUriList":[
+                            "audit/249520181017142030/card/1.jpg",
+                            "audit/249520181017142030/card/2.jpg"
+                         ],
+                         "type":4   //身份证
+                      },
+                      {
+                         "imgUriList":[],
+                         "type":5 //户口本
+                      },
+                      {
+                         "imgUriList":[
+                            "audit/249520181017142030/contract/3.jpg",
+                            "audit/249520181017142030/contract/4.jpg"
+                         ],
+                         "type":6 //合同
+                      }
+                   ],
+                   "status":"SUCCESS"
+                }
+
+   12. 审核完毕 提交
+       audit/commit  post
+          入参: orderNo  审核单号
+                isSuccess  审核是否成功
+                sendDate  推送时间（YYYY-MM-dd HH:mm:ss）
+                reson  备注
+
+             出参：status : 调用结果（SUCEESS:成功，FAIL：失败）
+                   desc : 结果描述
+
+            示例：
+                 http://localhost:8080/audit/commit
+                 {'orderNo':'249520181017142030','isSuccess':true,'sendDate':'2018-10-19 10:00:00','reson':'要得！'}
+
+                 {
+                   "desc":"提交成功！",
+                   "status":"SUCCESS"
+                 }
+
+   13.打印申请书(待讨论)
+
+   14.打印婚姻承诺书(待讨论)
+
+   15.打印具结证明书(待讨论)
+
+   16.批量下载
       (1) print/download_all  下载所有资料
-          入参：orderId
-          出参：xxx.zip
-   5.推送
-      无
+          入参: orderNo  审核单号
 
+             出参：.zip文件
 
-
-
-      https://www.cnblogs.com/qingxinblog/p/3404051.html
-
-
-      http://localhost:8080/doc/req_cert?orderId=201810091030502495
-      http://localhost:8080/print/req_cert?orderId=201810091030502495
-      http://localhost:8080/audit/list?curPage=1&pageSize=3
-      http://localhost:8080/audit/doAudit?orderNo=249520181009103050
-      http://localhost:8080/audit/detail?orderNo=249520181009103050
-      http://localhost:8080/busi_catalog/
+            示例：
+                 http://localhost:8080/print/download_all?orderNo=249520181017142030

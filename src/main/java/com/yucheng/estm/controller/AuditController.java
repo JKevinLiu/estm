@@ -3,6 +3,7 @@ package com.yucheng.estm.controller;
 import com.github.pagehelper.PageInfo;
 import com.yucheng.estm.constants.CommonContant;
 import com.yucheng.estm.constants.MessageContant;
+import com.yucheng.estm.dto.AuditCommitDto;
 import com.yucheng.estm.dto.AuditDto;
 import com.yucheng.estm.dto.ImgAlais;
 import com.yucheng.estm.dto.JsonResult;
@@ -11,9 +12,7 @@ import com.yucheng.estm.service.AuditService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class AuditController {
     /**
      *审核单列表，分页，条件过滤
      */
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<JsonResult> list(int curPage, int pageSize, Audit audit){
         JsonResult r = new JsonResult();
         try {
@@ -46,7 +45,7 @@ public class AuditController {
     /**
      *开始审核校验
      */
-    @RequestMapping(value = "/check")
+    @RequestMapping(value = "/check", method = RequestMethod.GET)
     public ResponseEntity<JsonResult> doAudit(String orderNo){
         JsonResult r = new JsonResult();
         try {
@@ -74,7 +73,7 @@ public class AuditController {
     /**
      * word审核单条目资源uri
      */
-    @RequestMapping(value = "/detail/word/{itemType}")
+    @RequestMapping(value = "/detail/word/{itemType}", method = RequestMethod.GET)
     public ResponseEntity<JsonResult> auditWordDetail(String orderNo, @PathVariable("itemType") String itemTypeStr){
         JsonResult r = new JsonResult();
         try {
@@ -104,7 +103,7 @@ public class AuditController {
     /**
      * 证明材料
      */
-    @RequestMapping(value = "/detail/master")
+    @RequestMapping(value = "/detail/master", method = RequestMethod.GET)
     public ResponseEntity<JsonResult> auditMasterDetail(String orderNo){
         JsonResult r = new JsonResult();
         try {
@@ -121,11 +120,11 @@ public class AuditController {
     /**
      *提交审核
      */
-    @RequestMapping(value = "/commit")
-    public ResponseEntity<JsonResult> commit(int auditId, boolean isSuccess, String sendDate,String reson){
+    @RequestMapping(value = "/commit", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult> commit(@RequestBody AuditCommitDto auditCommitDto){
         JsonResult r = new JsonResult();
         try {
-            auditService.commitAudit(auditId, isSuccess, sendDate, reson);
+            auditService.commitAudit(auditCommitDto.getOrderNo(), auditCommitDto.isSuccess(), auditCommitDto.getSendDate(), auditCommitDto.getReson());
             r.setStatus(MessageContant.STATUS_OK);
             r.setDesc("提交成功！");
         } catch (Exception e) {

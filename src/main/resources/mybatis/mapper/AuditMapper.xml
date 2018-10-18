@@ -5,26 +5,26 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="bus_type" jdbcType="INTEGER" property="busType" />
-    <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
-    <association column="audit_user_id" property="auditUser" select="com.yucheng.estm.mapper.InnerUserMapper.selectByPrimaryKey"/>
     <result column="state" jdbcType="INTEGER" property="state" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
     <result column="dir_path" jdbcType="VARCHAR" property="dirPath" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
+    <association column="audit_user_id" property="auditUser" select="com.yucheng.estm.mapper.InnerUserMapper.selectByPrimaryKey"/>
   </resultMap>
 
   <resultMap id="QueryResultMap" type="com.yucheng.estm.entity.Audit">
-    <id column="a.id" jdbcType="INTEGER" property="id" />
-    <result column="a.order_no" jdbcType="VARCHAR" property="orderNo" />
-    <result column="a.bus_type" jdbcType="INTEGER" property="busType" />
-    <association column="a.out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
-    <association column="a.audit_user_id" property="auditUser" select="com.yucheng.estm.mapper.InnerUserMapper.selectByPrimaryKey"/>
-    <result column="a.state" jdbcType="INTEGER" property="state" />
-    <result column="a.create_date" jdbcType="TIMESTAMP" property="createDate" />
-    <result column="a.audit_date" jdbcType="TIMESTAMP" property="auditDate" />
-    <result column="a.dir_path" jdbcType="VARCHAR" property="dirPath" />
-    <result column="a.remark" jdbcType="VARCHAR" property="remark" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="bus_type" jdbcType="INTEGER" property="busType" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="dir_path" jdbcType="VARCHAR" property="dirPath" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
+    <association column="audit_user_id" property="auditUser" select="com.yucheng.estm.mapper.InnerUserMapper.selectByPrimaryKey"/>
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -57,10 +57,10 @@
       <if test="busType != null">
         and a.bus_type = #{busType}
       </if>
-      <if test="o.outName != null">
+      <if test="outUser != null and outUser.name != null">
         and o.name LIKE '%' #{outUser.name} '%'
       </if>
-      <if test="outPhone != null">
+      <if test="outUser != null and outUser.phone != null">
         and o.phone LIKE '%' #{outUser.phone} '%'
       </if>
       <if test="state != null">
@@ -81,8 +81,8 @@
     audit_user_id, state, create_date,
     audit_date, dir_path, remark
     )
-    values (#{orderNo,jdbcType=VARCHAR}, #{busType,jdbcType=INTEGER}, #{outUserId,jdbcType=INTEGER},
-    #{auditUserId,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+    values (#{orderNo,jdbcType=VARCHAR}, #{busType,jdbcType=INTEGER}, #{outUser.id,jdbcType=INTEGER},
+    #{auditUser.id,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
     #{auditDate,jdbcType=TIMESTAMP}, #{dirPath,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
     )
   </insert>
@@ -98,10 +98,10 @@
       <if test="busType != null">
         bus_type,
       </if>
-      <if test="outUserId != null">
+      <if test="outUser ！= null and outUser.id != null">
         out_user_id,
       </if>
-      <if test="auditUserId != null">
+      <if test="auditUser != null and auditUser.id != null">
         audit_user_id,
       </if>
       <if test="state != null">
@@ -127,11 +127,11 @@
       <if test="busType != null">
         #{busType,jdbcType=INTEGER},
       </if>
-      <if test="outUserId != null">
-        #{outUserId,jdbcType=INTEGER},
+      <if test="outUser != null and outUser.id != null">
+        #{outUser.id,jdbcType=INTEGER},
       </if>
-      <if test="auditUserId != null">
-        #{auditUserId,jdbcType=INTEGER},
+      <if test="auditUser != null and auditUser.id != null">
+        #{auditUser.id,jdbcType=INTEGER},
       </if>
       <if test="state != null">
         #{state,jdbcType=INTEGER},
@@ -159,12 +159,6 @@
       <if test="busType != null">
         bus_type = #{busType,jdbcType=INTEGER},
       </if>
-      <if test="outUserId != null">
-        out_user_id = #{outUserId,jdbcType=INTEGER},
-      </if>
-      <if test="auditUserId != null">
-        audit_user_id = #{auditUserId,jdbcType=INTEGER},
-      </if>
       <if test="state != null">
         state = #{state,jdbcType=INTEGER},
       </if>
@@ -186,14 +180,14 @@
   <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.Audit">
     update t_audit
     set order_no = #{orderNo,jdbcType=VARCHAR},
-    bus_type = #{busType,jdbcType=INTEGER},
-    out_user_id = #{outUserId,jdbcType=INTEGER},
-    audit_user_id = #{auditUserId,jdbcType=INTEGER},
-    state = #{state,jdbcType=INTEGER},
-    create_date = #{createDate,jdbcType=TIMESTAMP},
-    audit_date = #{auditDate,jdbcType=TIMESTAMP},
-    dir_path = #{dirPath,jdbcType=VARCHAR},
-    remark = #{remark,jdbcType=VARCHAR}
+      bus_type = #{busType,jdbcType=INTEGER},
+      out_user_id = #{outUser.id,jdbcType=INTEGER},
+      audit_user_id = #{auditUser.id,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      dir_path = #{dirPath,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

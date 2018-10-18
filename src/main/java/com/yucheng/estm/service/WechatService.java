@@ -5,7 +5,7 @@ import com.yucheng.estm.entity.*;
 import java.util.List;
 
 public interface WechatService {
-    void register(String openId, String name, String phone);
+    OutUser register(String openId, String name, String phone);
 
     void createAuditOrder(Audit audit, List<AuditItem> auditItemList, ReqCert reqCert, Marriage marriage, Recognizance recognizance);
 

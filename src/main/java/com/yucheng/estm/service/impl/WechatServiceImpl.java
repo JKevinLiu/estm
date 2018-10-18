@@ -41,7 +41,7 @@ public class WechatServiceImpl implements WechatService {
 
 
     @Override
-    public void register(String openId, String name, String phone) {
+    public OutUser register(String openId, String name, String phone) {
         try {
             OutUser newUser = new OutUser();
             newUser.setName(name);
@@ -49,9 +49,10 @@ public class WechatServiceImpl implements WechatService {
             newUser.setPhone(phone);
             newUser.setCreateDate(DateUtil.getCurrentDate());
             outUserMapper.insert(newUser);
+            return newUser;
         }catch (Exception e){
             log.error(e.getMessage(), e);
-            throw new RuntimeException("新增用户失败！");
+            throw new RuntimeException("用户注册失败！");
         }
 
     }
@@ -77,7 +78,7 @@ public class WechatServiceImpl implements WechatService {
 
     @Override
     public void doSendWechat(WechatSend wechatSend) {
-        //推送微信逻辑 TODO
+        //推送逻辑 TODO
     }
 
     @Override

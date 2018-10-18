@@ -35,6 +35,7 @@ public class TransactionAdviceConfig {
         source.addTransactionalMethod("save*", txAttr_REQUIRED);
         source.addTransactionalMethod("delete*", txAttr_REQUIRED);
         source.addTransactionalMethod("update*", txAttr_REQUIRED);
+        source.addTransactionalMethod("commit*", txAttr_REQUIRED);
         source.addTransactionalMethod("exec*", txAttr_REQUIRED);
         source.addTransactionalMethod("set*", txAttr_REQUIRED);
         source.addTransactionalMethod("get*", txAttr_REQUIRED_READONLY);

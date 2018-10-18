@@ -3,6 +3,7 @@ package com.yucheng.estm.controller;
 import com.yucheng.estm.constants.CommonContant;
 import com.yucheng.estm.constants.MessageContant;
 import com.yucheng.estm.dto.JsonResult;
+import com.yucheng.estm.dto.RegisterDto;
 import com.yucheng.estm.entity.*;
 import com.yucheng.estm.service.OutUserService;
 import com.yucheng.estm.service.WechatService;
@@ -13,13 +14,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,22 +42,16 @@ public class WechatController {
      * 注册
      * @return
      */
-    @RequestMapping(value = "/register")
-    public ResponseEntity<JsonResult> register(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/register",method = RequestMethod.POST)
+    public ResponseEntity<JsonResult> register(@RequestBody RegisterDto registerDto){
         JsonResult r = new JsonResult();
 
-        System.out.println("success");
-        String signature = request.getParameter("signature");
-        String timestamp = request.getParameter("timestamp");
-        String nonce = request.getParameter("nonce");
-        String echostr = request.getParameter("echostr");
-
-        String openId = request.getParameter("openId");
-        String name = request.getParameter("name");
-        String phone = request.getParameter("phone");
-
         try {
-            wechatService.register(openId, name, phone);
+            //接入校验 TODO
+
+            OutUser outUser = wechatService.register(registerDto.getOpenId(), registerDto.getName(), registerDto.getPhone());
+            r.setDesc("注册成功！");
+            r.setResult(outUser);
             r.setStatus(MessageContant.STATUS_OK);
         } catch (Exception e) {
             r.setStatus(MessageContant.STATUS_FAIL);
@@ -72,9 +66,15 @@ public class WechatController {
      */
     @RequestMapping(value = "/create_audit",method = RequestMethod.POST)
     public ResponseEntity<JsonResult> create(Integer outUserId, MultipartFile[] files,
-                                             ReqCert reqCert, Marriage marriage, Recognizance recognizance){
+                                             @RequestBody ReqCert reqCert,@RequestBody Marriage marriage,@RequestBody Recognizance recognizance){
 
         JsonResult r = new JsonResult();
+
+        r.setDesc("提交成功！");
+        r.setStatus(MessageContant.STATUS_OK);
+
+        if(1 > 0)
+            return ResponseEntity.ok(r);
 
         try {
             OutUser outUser = outUserService.getUserById(outUserId);

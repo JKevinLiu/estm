@@ -92,18 +92,24 @@ public class AuditServiceImpl implements AuditService{
 
     @Override
     public String getWordItemResource(String orderNo, int itemType) {
-        AuditItem item = new AuditItem();
-        item.setOrderNo(orderNo);
-        item.setItemType(itemType);
-        item.setFileType(CommonContant.FT_WORD);
-        List<AuditItem> auditItemList = auditItemMapper.selectListByCondition(item);
-        if(auditItemList != null && auditItemList.size() == 1){
-            AuditItem auditItem = auditItemList.get(0);
-            String uri = auditItem.getPath() + auditItem.getFileName();
-            return uri;
-        }else{
+        try{
+            AuditItem item = new AuditItem();
+            item.setOrderNo(orderNo);
+            item.setItemType(itemType);
+            item.setFileType(CommonContant.FT_WORD);
+            List<AuditItem> auditItemList = auditItemMapper.selectListByCondition(item);
+            if(auditItemList != null && auditItemList.size() == 1){
+                AuditItem auditItem = auditItemList.get(0);
+                String uri = auditItem.getPath() + auditItem.getFileName();
+                return uri;
+            }else{
+                throw new Exception("你所访问的资源不存在！");
+            }
+        }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new RuntimeException("你所访问的资源不存在！");
         }
+
     }
 
     @Override
@@ -155,9 +161,9 @@ public class AuditServiceImpl implements AuditService{
     }
 
     @Override
-    public void commitAudit(int auditId, boolean isSuccess, String sendDate, String reson) {
+    public void commitAudit(String orderNo, boolean isSuccess, String sendDate, String reson) {
         try{
-            Audit audit = auditMapper.selectByPrimaryKey(auditId);
+            Audit audit = auditMapper.selectByOrderNo(orderNo);
             audit.setAuditDate(DateUtil.getCurrentDate());
             audit.setRemark(reson);
             if(isSuccess){
@@ -170,12 +176,12 @@ public class AuditServiceImpl implements AuditService{
 
             //插入推送表
             WechatSend wechatSend = new WechatSend();
-            wechatSend.setAuditId(auditId);
-            //wechatSend.setOutuserId();
+            wechatSend.setAuditId(audit.getId());
+            wechatSend.setOutUser(audit.getOutUser());
             wechatSend.setCotent(reson);
             wechatSend.setCreateDate(DateUtil.getCurrentDate());
             wechatSend.setSendDate(DateUtil.YYYYMMddmmss2Date(sendDate));
-            //wechatSend.setTemplateId();
+            // 设置模板wechatSend.setTemplateId(); TODO
 
             wechatSendMapper.insert(wechatSend);
 

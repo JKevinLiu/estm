@@ -11,11 +11,11 @@ import java.util.List;
 public interface AuditService {
     PageInfo<AuditDto> getAuditByCondtion(int curPage, int pageSize, Audit audit);
 
-    Audit getAuditByOrderNo(String orderId);
+    Audit getAuditByOrderNo(String orderNo);
 
     String getWordItemResource(String orderNo, int itemType) throws Exception;
 
     List<ImgAlais> getImgAliasList(String orderNo);
 
-    void commitAudit(int auditId, boolean isSuccess, String sendDate, String reson);
+    void commitAudit(String orderNo, boolean isSuccess, String sendDate, String reson);
 }

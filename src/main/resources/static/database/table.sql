@@ -21,7 +21,7 @@ drop table if exists t_inner_user;
 /*==============================================================*/
 create table t_inner_user
 (
-   id                   int not null,
+   id                   int not null auto_increment,
    user_name             varchar(40),
    password             varchar(60),
    nick_name             varchar(40),
@@ -38,7 +38,7 @@ drop table if exists t_catalog;
 /*==============================================================*/
 create table t_catalog
 (
-   id                   int not null,
+   id                   int not null auto_increment,
    parent_Id            int,
    name            VARCHAR(20),
    bus_code           VARCHAR(20),
@@ -53,7 +53,7 @@ drop table if exists t_audit;
 /*==============================================================*/
 create table t_audit
 (
-   id                   int not null,
+   id                   int not null auto_increment,
    order_no             varchar(18),
    bus_type             int,
    out_user_id          int,
@@ -74,7 +74,7 @@ drop table if exists t_audit_item;
 /*==============================================================*/
 create table t_audit_item
 (
-   id                   int not null,
+   id                   int not null auto_increment,
    order_no             varchar(18),
    item_type            int,
    file_type            int,
@@ -91,7 +91,7 @@ drop table if exists t_req_cert;
 /*==============================================================*/
 create table t_req_cert
 (
-   id                   int not null,
+   id                   int not null auto_increment,
    audit_item_id        int,
    app_type             varchar(200),
    ob_name1             varchar(40),
@@ -127,7 +127,7 @@ drop table if exists t_marriage;
 /*==============================================================*/
 create table t_marriage
 (
-   id                   int,
+   id                   int not null auto_increment,
    audit_item_id        int,
    cur_name             varchar(40),
    card_no              varchar(40),
@@ -150,7 +150,7 @@ drop table if exists t_recognizance;
 /*==============================================================*/
 create table t_recognizance
 (
-   id                   int,
+   id                   int not null auto_increment,
    audit_item_id       int,
    card_no              varchar(40),
    town                 varchar(40),
@@ -176,7 +176,7 @@ drop table if exists t_wx_send;
 /*==============================================================*/
 create table t_wx_send
 (
-   id                   int,
+   id                   int not null auto_increment,
    audit_id             int,
    out_user_id           int,
    cotent               varchar(255),
@@ -193,7 +193,7 @@ drop table if exists t_wx_send_his;
 /*==============================================================*/
 create table t_wx_send_his
 (
-   id                   int,
+   id                   int not null auto_increment,
    audit_id             int,
    outuser_id           int,
    cotent               varchar(255),

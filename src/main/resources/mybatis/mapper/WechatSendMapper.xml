@@ -4,14 +4,14 @@
     <resultMap id="BaseResultMap" type="com.yucheng.estm.entity.WechatSend" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="audit_id" property="auditId" jdbcType="INTEGER" />
-        <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
         <result column="cotent" property="cotent" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
         <result column="template_id" property="templateId" jdbcType="VARCHAR" />
+        <association column="out_user_id" property="outUser" select="com.yucheng.estm.mapper.OutUserMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List" >
-        id, audit_id, outuser_id, cotent, create_date, send_date, template_id
+        id, audit_id, out_user_id, cotent, create_date, send_date, template_id
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select
@@ -27,10 +27,10 @@
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into t_wx_send (audit_id, outuser_id, cotent,
+        insert into t_wx_send (audit_id, out_user_id, cotent,
         create_date, send_date, template_id
         )
-        values (#{auditId,jdbcType=INTEGER}, #{outuserId,jdbcType=INTEGER}, #{cotent,jdbcType=VARCHAR},
+        values (#{auditId,jdbcType=INTEGER}, #{outUser.id,jdbcType=INTEGER}, #{cotent,jdbcType=VARCHAR},
         #{createDate,jdbcType=TIMESTAMP}, #{sendDate,jdbcType=TIMESTAMP}, #{templateId,jdbcType=VARCHAR}
         )
     </insert>
@@ -43,8 +43,8 @@
             <if test="auditId != null" >
                 audit_id,
             </if>
-            <if test="outuserId != null" >
-                outuser_id,
+            <if test="outUser != null and outUser.id != null" >
+                out_user_id,
             </if>
             <if test="cotent != null" >
                 cotent,
@@ -63,8 +63,8 @@
             <if test="auditId != null" >
                 #{auditId,jdbcType=INTEGER},
             </if>
-            <if test="outuserId != null" >
-                #{outuserId,jdbcType=INTEGER},
+            <if test="outUser != null and outUser.id != null" >
+                #{outUser.id,jdbcType=INTEGER},
             </if>
             <if test="cotent != null" >
                 #{cotent,jdbcType=VARCHAR},
@@ -86,8 +86,8 @@
             <if test="auditId != null" >
                 audit_id = #{auditId,jdbcType=INTEGER},
             </if>
-            <if test="outuserId != null" >
-                outuser_id = #{outuserId,jdbcType=INTEGER},
+            <if test="outUser != null and outUser.id != null" >
+                out_user_id = #{outUser.id,jdbcType=INTEGER},
             </if>
             <if test="cotent != null" >
                 cotent = #{cotent,jdbcType=VARCHAR},
@@ -107,7 +107,7 @@
     <update id="updateByPrimaryKey" parameterType="com.yucheng.estm.entity.WechatSend" >
         update t_wx_send
         set audit_id = #{auditId,jdbcType=INTEGER},
-        outuser_id = #{outuserId,jdbcType=INTEGER},
+        out_user_id = #{outUser.id,jdbcType=INTEGER},
         cotent = #{cotent,jdbcType=VARCHAR},
         create_date = #{createDate,jdbcType=TIMESTAMP},
         send_date = #{sendDate,jdbcType=TIMESTAMP},

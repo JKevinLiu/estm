@@ -1,7 +1,10 @@
 package com.yucheng.estm.controller;
 
+import com.yucheng.estm.entity.Audit;
+import com.yucheng.estm.service.AuditService;
 import com.yucheng.estm.utils.FileUtil;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +18,9 @@ import java.util.Map;
 @Controller
 public class UploadAndDownLoadController {
     private static Logger log = Logger.getLogger(UploadAndDownLoadController.class);
+
+    @Autowired
+    private AuditService auditService;
 
     /**
      * 打印word
@@ -39,12 +45,17 @@ public class UploadAndDownLoadController {
      * 下载所有资料
      */
     @RequestMapping(value = "print/download_all")
-    public void downloadAll(HttpServletResponse response, String orderId){
-        String basePath = "audit"+ File.separator + orderId + File.separator;
+    public void downloadAll(HttpServletResponse response, String orderNo){
+        String basePath = "audit"+ File.separator + orderNo + File.separator;
+
+        Audit audit = auditService.getAuditByOrderNo(orderNo);
+
+        String attachName = audit.getOutUser().getName() + audit.getOutUser().getPhone()+".zip";
+
         //3.压缩文件夹并返回
         try (OutputStream out = response.getOutputStream()){
             response.setContentType("application/zip");
-            response.setHeader("Content-Disposition", "attachment; filename=ziliao.zip");
+            response.setHeader("Content-Disposition", "attachment; filename=" + attachName);
 
             FileUtil.toZip(basePath, out,false);
             out.flush();

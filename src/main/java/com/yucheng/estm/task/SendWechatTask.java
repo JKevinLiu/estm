@@ -7,6 +7,7 @@ import com.yucheng.estm.service.WechatService;
 import com.yucheng.estm.utils.DateUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,13 +16,14 @@ import java.io.StringWriter;
 import java.util.List;
 
 @Component
+@EnableScheduling
 public class SendWechatTask {
     private static Logger log = Logger.getLogger(SendWechatTask.class);
 
     @Autowired
     private WechatService wechatService;
 
-    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void sendMsg() {
         List<WechatSend> list = wechatService.getAllRecond();
         String errorMessage = "";
@@ -53,6 +55,5 @@ public class SendWechatTask {
                 wechatService.move2His(wechatSend, wechatSendHis);
             }
         }
-
     }
 }
