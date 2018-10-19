@@ -19,6 +19,13 @@
         from t_wx_send
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_wx_send
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
         delete from t_wx_send
         where id = #{id,jdbcType=INTEGER}

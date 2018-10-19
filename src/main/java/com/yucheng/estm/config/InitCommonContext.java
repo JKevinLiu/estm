@@ -6,6 +6,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,12 @@ public class InitCommonContext implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+
+        File dir = new File("audit/");
+
+        if(!dir.exists()){
+            dir.mkdir();
+        }
 
         if(isDemo){
             catalogNameMap.put(1, "房屋>>买卖>>个人");
