@@ -1,8 +1,8 @@
-package com.yucheng.estm.dto;
+package com.yucheng.estm.vo;
 
 import java.io.Serializable;
 
-public class LoginDto implements Serializable {
+public class LoginVo implements Serializable {
     private String username;
     private String password;
 

@@ -2,7 +2,7 @@ package com.yucheng.estm.controller;
 
 import com.yucheng.estm.constants.MessageContant;
 import com.yucheng.estm.dto.JsonResult;
-import com.yucheng.estm.dto.LoginDto;
+import com.yucheng.estm.vo.LoginVo;
 import com.yucheng.estm.entity.InnerUser;
 import com.yucheng.estm.service.InnerUserService;
 import org.apache.log4j.Logger;
@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 登录控制器
+ *
+ * @Author liukw 20191019
+ */
 @RestController
 @RequestMapping("/login")
 public class LoginController {
@@ -21,7 +26,7 @@ public class LoginController {
      * 登录
      */
     @RequestMapping(value = "/dologin", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult> dologin(@RequestBody LoginDto loginDto){
+    public ResponseEntity<JsonResult> dologin(@RequestBody LoginVo loginDto){
         JsonResult r = new JsonResult();
         try {
             InnerUser loginUser = innerUserService.dologinUser(loginDto.getUsername(), loginDto.getPassword());

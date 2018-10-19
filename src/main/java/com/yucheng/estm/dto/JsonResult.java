@@ -2,6 +2,11 @@ package com.yucheng.estm.dto;
 
 import java.io.Serializable;
 
+/**
+ * json返回-传输对象
+ *
+ * @Author liukw 20191019
+ */
 public class JsonResult implements Serializable {
 
     private String status;

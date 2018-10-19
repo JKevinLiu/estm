@@ -2,6 +2,11 @@ package com.yucheng.estm.constants;
 
 import java.io.File;
 
+/**
+ * 业务常量
+ *
+ * @Author liukw 20191019
+ */
 public class CommonContant {
 
     /**
@@ -43,5 +48,49 @@ public class CommonContant {
     public final static String FT_WORD_DESC = "WORD";
     public final static int FT_IMG = 2;
     public final static String FT_IMG_DESC = "IMG";
+
+    public final static int checkNum = 15;
+
+    public final static String[] unCheckAppType = new String[]{
+            "□土地所有权", "□国有建设用地使用权", "□宅基地使用权",
+            "□集体建设用地使用权", "□土地承包经营权", "□林地使用权",
+            "□海域使用权", "□无居民海岛使用权", "□房屋所有权 ",
+            "□构筑物所有权", "□森林、林木所有权", "□森林、林木使用权 ",
+            "□抵押权 ","□地役权 ", "□其他"
+    };
+
+    public final static String[] checkedAppType = new String[]{
+            "☑土地所有权", "☑国有建设用地使用权", "☑宅基地使用权",
+            "☑集体建设用地使用权", "☑土地承包经营权", "☑林地使用权",
+            "☑海域使用权", "☑无居民海岛使用权", "☑房屋所有权 ",
+            "☑构筑物所有权", "☑森林、林木所有权", "☑森林、林木使用权 ",
+            "☑抵押权 ","☑地役权 ", "☑其他"
+    };
+
+    public final static String[] unCheckResType = new String[]{
+            "□首次登记","□转移登记","□变更登记","□注销登记",
+            "□更正登记","□异议登记","□预告登记","□查封登记"," □其他遗失补证"
+    };
+
+    public final static String[] checkedResType = new String[]{
+            "☑首次登记","☑转移登记","☑变更登记","☑注销登记",
+            "☑更正登记","☑异议登记","☑预告登记","☑查封登记","☑其他遗失补证"
+    };
+
+    public final static String[] unCheckFormType = new String[]{
+            "□单一版","□集成版"
+    };
+
+    public final static String[] checkedFormType = new String[]{
+            "☑单一版","☑集成版"
+    };
+
+    public final static String[] unCheckCertType = new String[]{
+            "□是","□否"
+    };
+
+    public final static String[] checkedCertType = new String[]{
+            "☑是","☑否"
+    };
 
 }

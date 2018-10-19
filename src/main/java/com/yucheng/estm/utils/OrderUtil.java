@@ -13,7 +13,7 @@ public class OrderUtil {
 
         Calendar calendar = Calendar.getInstance();
         Date date = calendar.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("MMMMYYDDHHmmss");
+        DateFormat dateFormat = new SimpleDateFormat("YYYYMMDDHHmmss");
         String time = dateFormat.format(date);
 
         return number + time;

@@ -1,8 +1,8 @@
-package com.yucheng.estm.dto;
+package com.yucheng.estm.vo;
 
 import java.io.Serializable;
 
-public class AuditCommitDto implements Serializable {
+public class AuditCommitVo implements Serializable {
     private String orderNo;
     private boolean isSuccess;
     private String sendDate;

@@ -1,8 +1,8 @@
-package com.yucheng.estm.dto;
+package com.yucheng.estm.vo;
 
 import java.io.Serializable;
 
-public class RegisterDto implements Serializable {
+public class RegisterVo implements Serializable {
     private String signature;
     private String timestamp;
     private String nonce;

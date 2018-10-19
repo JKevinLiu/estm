@@ -1,7 +1,6 @@
 package com.yucheng.estm.utils;
 
-import com.deepoove.poi.XWPFTemplate;
-import com.yucheng.estm.constants.CommonContant;
+import com.yucheng.estm.entity.ReqCert;
 import org.apache.log4j.Logger;
 import org.apache.poi.POIXMLDocument;
 import org.apache.poi.hwpf.HWPFDocument;
@@ -15,7 +14,6 @@ import org.apache.poi.xwpf.converter.core.FileImageExtractor;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
 import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
 import org.apache.poi.xwpf.usermodel.*;
-import org.springframework.util.ResourceUtils;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,7 +23,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -310,16 +310,35 @@ public class FileUtil {
         String basePath = "audit"+ File.separator + "249520181013123030" + File.separator;
 
         //不动产申请书
-        String reqCertTemplatePath = CommonContant.reqQertWordTemplatePath;
         String reqCertRealPath = basePath + "reqcert.doc";
-        Map<String, String> reqCertWord = new HashMap<>();
-        reqCertWord.put("attr1","你好");
+        ReqCert reqCertWord = new ReqCert();
+        reqCertWord.setAppType1("1,3,5,7,9,11,13");
+        reqCertWord.setAppType2("1,3");
+        reqCertWord.setObName1("张三");
+        reqCertWord.setCardType1("身份证");
+        reqCertWord.setCardNo1("513822200008103344");
+        reqCertWord.setAdress1("雅安市雨城区XXX");
+        reqCertWord.setPostalCode1("530003");
+        reqCertWord.setObName2("李四");
+        reqCertWord.setCardType2("身份证");
+        reqCertWord.setCardNo2("513822200008103345");
+        reqCertWord.setAdress2("雅安市雨城区XXX");
+        reqCertWord.setPostalCode2("530003");
+        reqCertWord.setLocation("雅安市雨城区123街道");
+        reqCertWord.setEstType("房屋");
+        reqCertWord.setAcreage("60 平方米");
+        reqCertWord.setPurpose("个人使用");
+        reqCertWord.setCertificateNo("证书号533333");
+        reqCertWord.setAppForm("0");
+        reqCertWord.setAppCert("1");
+        reqCertWord.setRemark("我是备注");
+
         String reqCertHtmlRealPath = basePath + "reqcert.html";
         String reqCertImagePath = basePath + File.separator + "image_reqcert" + File.separator;
 
         //生成不动产申请书doc
         File reqCertTemplate = new File("E:\\workspaces\\estm\\src\\main\\resources\\templates\\word\\reqcert.doc");
-        FileUtil.createDocByTemplate(reqCertRealPath, reqCertTemplate, reqCertWord);
+        FileUtil.createDocByTemplate(reqCertRealPath, reqCertTemplate, MapHelper.conver2Map(reqCertWord));
 
         //生成不动产申请书html
         FileUtil.docToHtml(reqCertRealPath, reqCertHtmlRealPath, reqCertImagePath);

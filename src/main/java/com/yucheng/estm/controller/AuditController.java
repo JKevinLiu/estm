@@ -3,7 +3,7 @@ package com.yucheng.estm.controller;
 import com.github.pagehelper.PageInfo;
 import com.yucheng.estm.constants.CommonContant;
 import com.yucheng.estm.constants.MessageContant;
-import com.yucheng.estm.dto.AuditCommitDto;
+import com.yucheng.estm.vo.AuditCommitVo;
 import com.yucheng.estm.dto.AuditDto;
 import com.yucheng.estm.dto.ImgAlais;
 import com.yucheng.estm.dto.JsonResult;
@@ -15,7 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * 审核控制器
+ *
+ * @Author liukw 20191019
+ */
 @RestController
 @RequestMapping("/audit")
 public class AuditController {
@@ -121,7 +125,7 @@ public class AuditController {
      *提交审核
      */
     @RequestMapping(value = "/commit", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult> commit(@RequestBody AuditCommitDto auditCommitDto){
+    public ResponseEntity<JsonResult> commit(@RequestBody AuditCommitVo auditCommitDto){
         JsonResult r = new JsonResult();
         try {
             auditService.commitAudit(auditCommitDto.getOrderNo(), auditCommitDto.isSuccess(), auditCommitDto.getSendDate(), auditCommitDto.getReson());

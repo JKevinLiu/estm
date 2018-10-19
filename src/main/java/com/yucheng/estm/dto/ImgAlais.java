@@ -1,6 +1,10 @@
 package com.yucheng.estm.dto;
 
-
+/**
+ * 图片类型-传输对象
+ *
+ * @Author liukw 20191019
+ */
 import java.io.Serializable;
 import java.util.List;
 

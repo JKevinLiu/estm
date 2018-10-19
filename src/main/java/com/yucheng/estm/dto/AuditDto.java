@@ -1,9 +1,12 @@
 package com.yucheng.estm.dto;
 
-import com.yucheng.estm.config.InitCommonContext;
-import com.yucheng.estm.utils.DateUtil;
-
 import java.io.Serializable;
+
+/**
+ * 审批-传输对象
+ *
+ * @Author liukw 20191019
+ */
 
 public class AuditDto implements Serializable{
     private String outUserName;

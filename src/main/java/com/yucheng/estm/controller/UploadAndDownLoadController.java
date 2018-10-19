@@ -15,6 +15,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 上传下载控制器
+ *
+ * @Author liukw 20191019
+ */
+
 @Controller
 public class UploadAndDownLoadController {
     private static Logger log = Logger.getLogger(UploadAndDownLoadController.class);

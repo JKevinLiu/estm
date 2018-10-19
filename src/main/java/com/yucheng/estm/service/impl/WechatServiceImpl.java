@@ -1,13 +1,19 @@
 package com.yucheng.estm.service.impl;
 
+import com.yucheng.estm.config.AuditAliasStrategyFactory;
 import com.yucheng.estm.entity.*;
 import com.yucheng.estm.mapper.*;
+import com.yucheng.estm.service.AuditBuisnessStrategy;
+import com.yucheng.estm.service.OutUserService;
 import com.yucheng.estm.service.WechatService;
 import com.yucheng.estm.utils.DateUtil;
+import com.yucheng.estm.utils.OrderUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Service
@@ -15,28 +21,19 @@ public class WechatServiceImpl implements WechatService {
     private static Logger log = Logger.getLogger(WechatServiceImpl.class);
 
     @Autowired
+    private AuditAliasStrategyFactory auditAliasStrategyFactory;
+
+    @Autowired
     private OutUserMapper outUserMapper;
-
-    @Autowired
-    private AuditMapper auditMapper;
-
-    @Autowired
-    private AuditItemMapper auditItemMapper;
-
-    @Autowired
-    private ReqCertMapper reqCertMapper;
-
-    @Autowired
-    private MarriageMapper marriageMapper;
-
-    @Autowired
-    private RecognizanceMapper recognizanceMapper;
 
     @Autowired
     private WechatSendMapper wechatSendMapper;
 
     @Autowired
     private WechatSendHisMapper wechatSendHisMapper;
+
+    @Autowired
+    private OutUserService outUserService;
 
 
 
@@ -58,13 +55,18 @@ public class WechatServiceImpl implements WechatService {
     }
 
     @Override
-    public void createAuditOrder(Audit audit, List<AuditItem> auditItemList, ReqCert reqCert, Marriage marriage, Recognizance recognizance) {
+    public void createAuditOrder(Integer outUserId, int busiType, MultipartFile[] files, List<Word> wordList) {
         try{
-            auditMapper.insert(audit);
-            auditItemMapper.insertBatch(auditItemList);
-            reqCertMapper.insert(reqCert);
-            marriageMapper.insert(marriage);
-            recognizanceMapper.insert(recognizance);
+
+            AuditBuisnessStrategy buisnessStrategy = auditAliasStrategyFactory.getAuditAliasStrategy(busiType);
+
+            OutUser outUser = outUserService.getUserById(outUserId);
+            String orderNo =  OrderUtil.createOrderId(outUser);
+
+            buisnessStrategy.setBusiType(busiType);
+            buisnessStrategy.createAuditOrder(outUser, orderNo, files, wordList);
+
+
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw new RuntimeException("创建审核单失败！");

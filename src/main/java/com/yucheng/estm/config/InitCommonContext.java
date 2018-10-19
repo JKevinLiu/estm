@@ -10,27 +10,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 初始化系统参数
+ *
+ * @Author liukw 20191019
+ */
 @Component
 public class InitCommonContext implements InitializingBean {
 
     private static Catalog root;
     private static Map<Integer, String> catalogNameMap = new HashMap<>();
+    private static Map<Integer, String> businessStrategyMap = new HashMap<>();
+
+    private boolean isDemo = true;
 
     @Autowired
     private CatalogService catalogService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-       /* List<Catalog> catalogList = catalogService.getCatalogListByParentId(-1);
-        if(catalogList != null && catalogList.size() > 0){
-            root = catalogList.get(0);
+
+        if(isDemo){
+            catalogNameMap.put(1, "房屋>>买卖>>个人");
+            businessStrategyMap.put(1, "common");
         }else{
-            root = new Catalog();
+            List<Catalog> catalogList = catalogService.getCatalogListByParentId(-1);
+            if(catalogList != null && catalogList.size() > 0){
+                root = catalogList.get(0);
+            }else{
+                root = new Catalog();
+            }
+            initCatalogMap(root, "");
         }
-        initCatalogMap(root, "");*/
-
-        catalogNameMap.put(1, "房屋>>买卖>>个人");
-
     }
 
     private void initCatalogMap(Catalog cat, String baseName){
@@ -63,4 +74,7 @@ public class InitCommonContext implements InitializingBean {
         return catalogNameMap;
     }
 
+    public static Map<Integer, String> getBusinessStrategyMap() {
+        return businessStrategyMap;
+    }
 }

@@ -1,6 +1,6 @@
 package com.yucheng.estm.entity;
 
-public class Marriage {
+public class Marriage implements Word{
     private Integer id;
 
     private Integer auditItemId;

@@ -1,15 +1,17 @@
 package com.yucheng.estm.entity;
 
-public class ReqCert {
+public class ReqCert implements Word{
     private Integer id;
 
     private Integer auditItemId;
 
-    private String appType;
+    private String appType1;
+
+    private String appType2;
 
     private String obName1;
 
-    private Integer cardType1;
+    private String cardType1;
 
     private String cardNo1;
 
@@ -19,7 +21,7 @@ public class ReqCert {
 
     private String obName2;
 
-    private Integer cardType2;
+    private String cardType2;
 
     private String cardNo2;
 
@@ -37,9 +39,9 @@ public class ReqCert {
 
     private String certificateNo;
 
-    private Integer appForm;
+    private String appForm;
 
-    private Integer appCert;
+    private String appCert;
 
     private String remark;
 
@@ -67,12 +69,20 @@ public class ReqCert {
         this.auditItemId = auditItemId;
     }
 
-    public String getAppType() {
-        return appType;
+    public String getAppType1() {
+        return appType1;
     }
 
-    public void setAppType(String appType) {
-        this.appType = appType == null ? null : appType.trim();
+    public void setAppType1(String appType1) {
+        this.appType1 = appType1;
+    }
+
+    public String getAppType2() {
+        return appType2;
+    }
+
+    public void setAppType2(String appType2) {
+        this.appType2 = appType2;
     }
 
     public String getObName1() {
@@ -83,11 +93,11 @@ public class ReqCert {
         this.obName1 = obName1 == null ? null : obName1.trim();
     }
 
-    public Integer getCardType1() {
+    public String getCardType1() {
         return cardType1;
     }
 
-    public void setCardType1(Integer cardType1) {
+    public void setCardType1(String cardType1) {
         this.cardType1 = cardType1;
     }
 
@@ -123,11 +133,11 @@ public class ReqCert {
         this.obName2 = obName2 == null ? null : obName2.trim();
     }
 
-    public Integer getCardType2() {
+    public String getCardType2() {
         return cardType2;
     }
 
-    public void setCardType2(Integer cardType2) {
+    public void setCardType2(String cardType2) {
         this.cardType2 = cardType2;
     }
 
@@ -195,19 +205,19 @@ public class ReqCert {
         this.certificateNo = certificateNo == null ? null : certificateNo.trim();
     }
 
-    public Integer getAppForm() {
+    public String getAppForm() {
         return appForm;
     }
 
-    public void setAppForm(Integer appForm) {
+    public void setAppForm(String appForm) {
         this.appForm = appForm;
     }
 
-    public Integer getAppCert() {
+    public String getAppCert() {
         return appCert;
     }
 
-    public void setAppCert(Integer appCert) {
+    public void setAppCert(String appCert) {
         this.appCert = appCert;
     }
 

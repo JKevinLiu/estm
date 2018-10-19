@@ -1,6 +1,6 @@
 package com.yucheng.estm.entity;
 
-public class Recognizance {
+public class Recognizance implements Word{
     private Integer id;
 
     private Integer auditItemId;

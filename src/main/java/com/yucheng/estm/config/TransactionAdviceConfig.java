@@ -13,6 +13,11 @@ import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
+/**
+ * aop事务配置
+ *
+ * @Author liukw 20191019
+ */
 @Aspect
 @Configuration
 public class TransactionAdviceConfig {
@@ -38,6 +43,8 @@ public class TransactionAdviceConfig {
         source.addTransactionalMethod("commit*", txAttr_REQUIRED);
         source.addTransactionalMethod("exec*", txAttr_REQUIRED);
         source.addTransactionalMethod("set*", txAttr_REQUIRED);
+        source.addTransactionalMethod("create*", txAttr_REQUIRED);
+
         source.addTransactionalMethod("get*", txAttr_REQUIRED_READONLY);
         source.addTransactionalMethod("query*", txAttr_REQUIRED_READONLY);
         source.addTransactionalMethod("find*", txAttr_REQUIRED_READONLY);
